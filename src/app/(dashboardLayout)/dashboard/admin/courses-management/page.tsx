@@ -32,8 +32,7 @@ interface Course {
   imageUrl?: string;
 }
 
-const API =
-  process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000/api/v1';
+const API = process.env.NEXT_PUBLIC_BACKEND_URL;
 const getToken = () => {
   return (
     localStorage.getItem('accessToken') || sessionStorage.getItem('accessToken')

@@ -16,9 +16,12 @@ type Project = {
 
 async function getProject(id: string): Promise<Project | null> {
   try {
-    const res = await fetch(`http://localhost:5000/api/v1/portfolio/${id}`, {
-      cache: 'no-store',
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/portfolio/${id}`,
+      {
+        cache: 'no-store',
+      },
+    );
     if (!res.ok) return null;
     const json = await res.json();
     return json.data || null;

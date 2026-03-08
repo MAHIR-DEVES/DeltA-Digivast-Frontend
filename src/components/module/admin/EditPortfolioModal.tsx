@@ -34,7 +34,7 @@ export default function EditPortfolioModal({
   const [file, setFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const API_BASE = `http://localhost:5000/api/v1/portfolio/${item.id}`;
+  const API_BASE = `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/portfolio/${item.id}`;
 
   const token =
     localStorage.getItem('accessToken') ||

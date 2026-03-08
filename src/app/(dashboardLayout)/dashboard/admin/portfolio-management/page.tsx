@@ -62,7 +62,7 @@ export default function PortfolioManagement() {
   });
   const [editItem, setEditItem] = useState<PortfolioItem | null>(null);
 
-  const API_BASE = 'http://localhost:5000/api/v1/portfolio';
+  const API_BASE = `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/portfolio`;
   const token =
     typeof window !== 'undefined'
       ? localStorage.getItem('accessToken') ||

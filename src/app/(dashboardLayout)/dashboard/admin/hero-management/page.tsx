@@ -96,7 +96,7 @@ export default function HeroManagement() {
           : null;
       console.log(token);
       const res = await axios.patch(
-        `http://localhost:5000/api/v1/hero/${HERO_ID}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/hero/${HERO_ID}`,
         heroData,
         {
           headers: {

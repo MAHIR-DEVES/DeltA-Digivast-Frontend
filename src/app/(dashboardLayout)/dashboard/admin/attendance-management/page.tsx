@@ -10,12 +10,6 @@ import {
   Clock,
   Filter,
   RefreshCw,
-  User,
-  Hash,
-  Briefcase,
-  LogIn,
-  LogOut,
-  Hourglass,
 } from 'lucide-react';
 import axios from 'axios';
 
@@ -40,7 +34,7 @@ export default function AttendanceManagement() {
     localStorage.getItem('accessToken') ||
     sessionStorage.getItem('accessToken');
 
-  const API = 'http://localhost:5000';
+  const API = process.env.NEXT_PUBLIC_BACKEND_URL;
 
   // ================= HELPER FUNCTIONS =================
 
