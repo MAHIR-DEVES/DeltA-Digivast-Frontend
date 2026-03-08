@@ -22,7 +22,6 @@ export default function HeroManagement() {
     description: '',
     imageUrl: null,
   });
-  console.log(heroData);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -37,7 +36,6 @@ export default function HeroManagement() {
         );
         const data = res.data;
         const hero = data.data;
-        console.log(hero);
         setHeroData({
           title: hero.title,
           description: hero.description,
@@ -94,18 +92,16 @@ export default function HeroManagement() {
           ? localStorage.getItem('accessToken') ||
             sessionStorage.getItem('accessToken')
           : null;
-      console.log(token);
       const res = await axios.patch(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/hero/${HERO_ID}`,
         heroData,
         {
           headers: {
-            Authorization: token ? `Bearer ${token}` : '', // token যোগ
+            Authorization: token ? `Bearer ${token}` : '',
           },
         },
       );
 
-      console.log('Updated hero:', res.data);
       toast.success('Hero content successfully changed');
     } catch (err) {
       console.error('Update failed:', err);

@@ -1,34 +1,9 @@
 'use client';
 import React from 'react';
-import {
-  Phone,
-  Mail,
-  MapPin,
-  Clock,
-  Send,
-  MessageSquare,
-  Users,
-  CheckCircle,
-  Facebook,
-  Twitter,
-  Linkedin,
-  Instagram,
-} from 'lucide-react';
+
 import { Contact2 } from '@/components/layouts/contact2';
 
 export default function ContactPage() {
-  const [formData, setFormData] = React.useState({
-    name: '',
-    email: '',
-    subject: '',
-    message: '',
-  });
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log(formData);
-  };
-
   return (
     <div className="min-h-screen bg-white dark:bg-black">
       {/* Hero Section */}

@@ -52,8 +52,6 @@ export default function ManagerDashboard() {
     fetchUsers();
   }, []);
 
-  console.log(staff);
-
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 ">
       {/* Header Section with Welcome and Actions */}

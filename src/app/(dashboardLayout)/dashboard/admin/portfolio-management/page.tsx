@@ -44,7 +44,6 @@ const getYouTubeId = (url: string) => {
 
 export default function PortfolioManagement() {
   const [portfolioItems, setPortfolioItems] = useState<PortfolioItem[]>([]);
-  console.log(portfolioItems);
   const [loading, setLoading] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
   const [file, setFile] = useState<File | null>(null);

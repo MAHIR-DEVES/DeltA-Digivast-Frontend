@@ -22,7 +22,6 @@ type Props = {
 const categories = ['all', 'video', 'web', 'design', 'Frontend Design'];
 
 export default function ProjectGrid({ projects }: Props) {
-  console.log(projects);
   const [filter, setFilter] = React.useState<'all' | string>('all');
 
   const filteredProjects =
