@@ -284,14 +284,16 @@ export default function MyProfile() {
               ) : (
                 <div className="flex flex-wrap gap-2">
                   {user?.skills ? (
-                    user.skills.split(',').map((skill, index) => (
-                      <span
-                        key={index}
-                        className="px-3 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full text-sm"
-                      >
-                        {skill.trim()}
-                      </span>
-                    ))
+                    user.skills
+                      .split(',')
+                      .map((skill: string, index: number) => (
+                        <span
+                          key={index}
+                          className="px-3 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full text-sm"
+                        >
+                          {skill.trim()}
+                        </span>
+                      ))
                   ) : (
                     <p className="text-gray-500 dark:text-gray-400 italic">
                       No skills added

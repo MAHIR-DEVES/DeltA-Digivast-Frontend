@@ -116,7 +116,7 @@ export default async function ProjectDetailPage({ params }: Props) {
                       ? `https://www.youtube.com/embed/${project.videoUrl.split('/').pop()}`
                       : project.videoUrl?.includes('youtube')
                         ? project.videoUrl.replace('watch?v=', 'embed/')
-                        : project.videoUrl
+                        : project.videoUrl || ''
                   }
                   title={project.title}
                   className="w-full h-full"
