@@ -1,6 +1,15 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
-import { MenuIcon } from 'lucide-react';
+import {
+  LayoutDashboard,
+  LogOut,
+  MenuIcon,
+  Moon,
+  Settings,
+  Sun,
+  User,
+} from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -29,14 +38,31 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { useRouter } from 'next/navigation';
 
-import { ModeToggle } from './ModeToggle';
+import { clearAuthData, getStoredUser } from '@/utils/auth.utils';
+import { useEffect, useState } from 'react';
 
 interface NavbarProps {
   className?: string;
 }
 
 const Navbar = ({ className }: NavbarProps) => {
+  const [user, setUser] = useState<any>(null);
+  const [mounted, setMounted] = useState(false);
+  const [theme, setTheme] = useState<'light' | 'dark'>('light');
+
+  useEffect(() => {
+    setUser(getStoredUser());
+    setMounted(true);
+  }, []);
   const features = [
     {
       title: 'Videography',
@@ -69,6 +95,18 @@ const Navbar = ({ className }: NavbarProps) => {
       href: '/services/vsmm',
     },
   ];
+  const router = useRouter();
+
+  const handleLogout = () => {
+    clearAuthData();
+    router.push('/login');
+  };
+
+  const toggleTheme = () => {
+    const newTheme = theme === 'light' ? 'dark' : 'light';
+    setTheme(newTheme);
+    document.documentElement.classList.toggle('dark');
+  };
 
   return (
     <section
@@ -76,6 +114,86 @@ const Navbar = ({ className }: NavbarProps) => {
     >
       <div className="container mx-auto px-2 md:px-0">
         <nav className="flex items-center justify-between">
+          {/* mobile menu */}
+          <div className=" sm:hidden block">
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button variant="outline" size="icon">
+                  <MenuIcon className="h-4 w-4" />
+                </Button>
+              </SheetTrigger>
+
+              <SheetContent side="top" className="max-h-screen overflow-auto">
+                <SheetHeader>
+                  <SheetTitle>
+                    <Link href="/" className="flex items-center gap-2">
+                      <Image
+                        src="/image/logo.png"
+                        width={24}
+                        height={24}
+                        className="max-h-6"
+                        alt="Delta Digivast"
+                      />
+                      <span className="text-lg font-semibold">
+                        Delta Digivast
+                      </span>
+                    </Link>
+                  </SheetTitle>
+                </SheetHeader>
+
+                <div className="flex flex-col p-4">
+                  {/* Main Menu */}
+                  <div className="flex flex-col gap-5 mt-6 text-base font-medium">
+                    <Link href="/" className="hover:text-primary">
+                      Home
+                    </Link>
+
+                    <Link href="/portfolio" className="hover:text-primary">
+                      Portfolio
+                    </Link>
+
+                    <Link href="/blog" className="hover:text-primary">
+                      Blog
+                    </Link>
+
+                    <Link href="/about-us" className="hover:text-primary">
+                      About Us
+                    </Link>
+
+                    <Link href="/contact" className="hover:text-primary">
+                      Contact
+                    </Link>
+                  </div>
+
+                  {/* Services Accordion */}
+                  <Accordion type="single" collapsible className="mt-6">
+                    <AccordionItem value="services" className="border-none">
+                      <AccordionTrigger className="text-base hover:no-underline">
+                        Services
+                      </AccordionTrigger>
+
+                      <AccordionContent>
+                        <div className="flex flex-col gap-3 mt-2">
+                          {features.map(feature => (
+                            <Link
+                              key={feature.title}
+                              href={feature.href}
+                              className="rounded-md p-2 hover:bg-muted/70"
+                            >
+                              <p className="font-semibold">{feature.title}</p>
+                              <p className="text-sm text-muted-foreground">
+                                {feature.description}
+                              </p>
+                            </Link>
+                          ))}
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
+                  </Accordion>
+                </div>
+              </SheetContent>
+            </Sheet>
+          </div>
           {/* ================= Logo ================= */}
           <Link href="/" className="flex items-center gap-2">
             <Image
@@ -162,8 +280,16 @@ const Navbar = ({ className }: NavbarProps) => {
           <div className="flex items-center gap-3">
             {/* Desktop actions */}
             <div className="hidden lg:flex items-center gap-4">
-              <ModeToggle />
-              <Button
+              {/* Theme Toggle */}
+              <button
+                onClick={toggleTheme}
+                className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 
+                                   text-gray-600 dark:text-gray-400 transition-colors
+                                   hidden sm:block"
+              >
+                {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
+              </button>
+              {/* <Button
                 className="
     bg-gradient-to-r
     from-[#6efd0b] via-[#8bff3a] to-[#4fd100]
@@ -175,84 +301,184 @@ const Navbar = ({ className }: NavbarProps) => {
   "
               >
                 Free Consultation
-              </Button>
+              </Button> */}
+
+              {mounted && user && (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <button className="flex items-center gap-2 focus:outline-none group">
+                      {/* Avatar with Gradient */}
+                      <div className="relative">
+                        <div
+                          className="w-9 h-9 rounded-full overflow-hidden 
+                bg-gradient-to-br from-[#6efd0b] via-[#8bff3a] to-[#4fd100]
+                flex items-center justify-center
+                text-white font-semibold text-sm
+                shadow-md"
+                        >
+                          {user?.photoUrl ? (
+                            <Image
+                              src={user.photoUrl}
+                              width={36}
+                              height={36}
+                              alt={user?.name || 'User'}
+                              className="w-full h-full object-cover"
+                            />
+                          ) : (
+                            <span className="uppercase">
+                              {user?.name?.charAt(0) || 'U'}
+                            </span>
+                          )}
+                        </div>
+                        {/* Online Status Indicator */}
+                        <span
+                          className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white 
+                         dark:border-gray-900 rounded-full"
+                        ></span>
+                      </div>
+                    </button>
+                  </DropdownMenuTrigger>
+
+                  <DropdownMenuContent
+                    align="end"
+                    className="w-56 mt-2 p-1 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl shadow-xl"
+                  >
+                    {/* Menu Items */}
+
+                    <DropdownMenuItem asChild>
+                      <Link
+                        href="/dashboard"
+                        className="flex items-center gap-3 px-3 py-2.5 text-sm text-gray-700 dark:text-gray-300 
+                   hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg cursor-pointer
+                   transition-colors duration-200 group"
+                      >
+                        <div className="p-1.5 rounded-lg bg-purple-50 dark:bg-purple-500/10 group-hover:bg-purple-100 dark:group-hover:bg-purple-500/20 transition-colors">
+                          <LayoutDashboard
+                            size={16}
+                            className="text-purple-600 dark:text-purple-400"
+                          />
+                        </div>
+                        <span className="flex-1">Dashboard</span>
+                        <span className="text-xs text-gray-400">⌘D</span>
+                      </Link>
+                    </DropdownMenuItem>
+
+                    <DropdownMenuSeparator className="my-1 bg-gray-200 dark:bg-gray-800" />
+
+                    <DropdownMenuItem
+                      onClick={handleLogout}
+                      className="flex items-center gap-3 px-3 py-2.5 text-sm text-red-600 dark:text-red-400 
+                 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-lg cursor-pointer
+                 transition-colors duration-200 group"
+                    >
+                      <div className="p-1.5 rounded-lg bg-red-50 dark:bg-red-500/10 group-hover:bg-red-100 dark:group-hover:bg-red-500/20 transition-colors">
+                        <LogOut
+                          size={16}
+                          className="text-red-600 dark:text-red-400"
+                        />
+                      </div>
+                      <span className="flex-1">Logout</span>
+                      <span className="text-xs text-gray-400">⌘Q</span>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              )}
             </div>
 
             {/* Mobile actions */}
             <div className="flex items-center gap-2 lg:hidden">
-              <ModeToggle />
+              {/* Theme Toggle */}
+              <button
+                onClick={toggleTheme}
+                className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 
+                                   text-gray-600 dark:text-gray-400 transition-colors
+                                   sm:hidden block"
+              >
+                {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
+              </button>
 
-              <Sheet>
-                <SheetTrigger asChild>
-                  <Button variant="outline" size="icon">
-                    <MenuIcon className="h-4 w-4" />
-                  </Button>
-                </SheetTrigger>
-
-                <SheetContent side="top" className="max-h-screen overflow-auto">
-                  <SheetHeader>
-                    <SheetTitle>
-                      <Link href="/" className="flex items-center gap-2">
-                        <Image
-                          src="/image/logo.png"
-                          width={24}
-                          height={24}
-                          className="max-h-6"
-                          alt="Delta Digivast"
-                        />
-                        <span className="text-lg font-semibold">
-                          Delta Digivast
-                        </span>
-                      </Link>
-                    </SheetTitle>
-                  </SheetHeader>
-
-                  <div className="flex flex-col p-4">
-                    <Accordion type="single" collapsible className="mt-4 mb-2">
-                      <AccordionItem value="features" className="border-none">
-                        <AccordionTrigger className="text-base hover:no-underline">
-                          Features
-                        </AccordionTrigger>
-                        <AccordionContent>
-                          <div className="grid md:grid-cols-2">
-                            {features.map(feature => (
-                              <Link
-                                key={feature.title}
-                                href={feature.href}
-                                className="rounded-md p-3 transition-colors hover:bg-muted/70"
-                              >
-                                <p className="mb-1 font-semibold">
-                                  {feature.title}
-                                </p>
-                                <p className="text-sm text-muted-foreground">
-                                  {feature.description}
-                                </p>
-                              </Link>
-                            ))}
+              <div className=" sm:hidden block">
+                {mounted && user && (
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <button className="flex items-center gap-2 focus:outline-none group">
+                        {/* Avatar with Gradient */}
+                        <div className="relative">
+                          <div
+                            className="w-9 h-9 rounded-full overflow-hidden 
+                bg-gradient-to-br from-[#6efd0b] via-[#8bff3a] to-[#4fd100]
+                flex items-center justify-center
+                text-white font-semibold text-sm
+                shadow-md"
+                          >
+                            {user?.photoUrl ? (
+                              <Image
+                                src={user.photoUrl}
+                                width={36}
+                                height={36}
+                                alt={user?.name || 'User'}
+                                className="w-full h-full object-cover"
+                              />
+                            ) : (
+                              <span className="uppercase">
+                                {user?.name?.charAt(0) || 'U'}
+                              </span>
+                            )}
                           </div>
-                        </AccordionContent>
-                      </AccordionItem>
-                    </Accordion>
+                          {/* Online Status Indicator */}
+                          <span
+                            className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white 
+                         dark:border-gray-900 rounded-full"
+                          ></span>
+                        </div>
+                      </button>
+                    </DropdownMenuTrigger>
 
-                    <div className="flex flex-col gap-6 mt-4">
-                      <Link href="#" className="font-medium">
-                        Templates
-                      </Link>
-                      <Link href="#" className="font-medium">
-                        Blog
-                      </Link>
-                      <Link href="#" className="font-medium">
-                        Pricing
-                      </Link>
-                    </div>
+                    <DropdownMenuContent
+                      align="end"
+                      className="w-56 mt-2 p-1 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl shadow-xl"
+                    >
+                      {/* Menu Items */}
 
-                    <div className="mt-6 flex flex-col gap-4">
-                      <Button variant="outline">Sign in</Button>
-                      <Button>Start for free</Button>
-                    </div>
-                  </div>
-                </SheetContent>
-              </Sheet>
+                      <DropdownMenuItem asChild>
+                        <Link
+                          href="/dashboard"
+                          className="flex items-center gap-3 px-3 py-2.5 text-sm text-gray-700 dark:text-gray-300 
+                   hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg cursor-pointer
+                   transition-colors duration-200 group"
+                        >
+                          <div className="p-1.5 rounded-lg bg-purple-50 dark:bg-purple-500/10 group-hover:bg-purple-100 dark:group-hover:bg-purple-500/20 transition-colors">
+                            <LayoutDashboard
+                              size={16}
+                              className="text-purple-600 dark:text-purple-400"
+                            />
+                          </div>
+                          <span className="flex-1">Dashboard</span>
+                          <span className="text-xs text-gray-400">⌘D</span>
+                        </Link>
+                      </DropdownMenuItem>
+
+                      <DropdownMenuSeparator className="my-1 bg-gray-200 dark:bg-gray-800" />
+
+                      <DropdownMenuItem
+                        onClick={handleLogout}
+                        className="flex items-center gap-3 px-3 py-2.5 text-sm text-red-600 dark:text-red-400 
+                 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-lg cursor-pointer
+                 transition-colors duration-200 group"
+                      >
+                        <div className="p-1.5 rounded-lg bg-red-50 dark:bg-red-500/10 group-hover:bg-red-100 dark:group-hover:bg-red-500/20 transition-colors">
+                          <LogOut
+                            size={16}
+                            className="text-red-600 dark:text-red-400"
+                          />
+                        </div>
+                        <span className="flex-1">Logout</span>
+                        <span className="text-xs text-gray-400">⌘Q</span>
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                )}
+              </div>
             </div>
           </div>
         </nav>

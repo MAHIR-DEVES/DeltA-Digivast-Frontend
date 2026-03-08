@@ -1,8 +1,8 @@
 import React from 'react';
 import { FaFacebook, FaInstagram, FaLinkedin, FaTwitter } from 'react-icons/fa';
-
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
+import Link from 'next/link';
 
 interface FooterProps {
   logo?: {
@@ -12,64 +12,17 @@ interface FooterProps {
     title: string;
   };
   className?: string;
-  sections?: Array<{
-    title: string;
-    links: Array<{ name: string; href: string }>;
-  }>;
-  description?: string;
+  copyright?: string;
   socialLinks?: Array<{
     icon: React.ReactElement;
     href: string;
     label: string;
   }>;
-  copyright?: string;
   legalLinks?: Array<{
     name: string;
     href: string;
   }>;
 }
-
-const defaultSections = [
-  {
-    title: 'Product',
-    links: [
-      { name: 'Overview', href: '#' },
-      { name: 'Pricing', href: '#' },
-      { name: 'Marketplace', href: '#' },
-      { name: 'Features', href: '#' },
-    ],
-  },
-  {
-    title: 'Company',
-    links: [
-      { name: 'About', href: '#' },
-      { name: 'Team', href: '#' },
-      { name: 'Blog', href: '#' },
-      { name: 'Careers', href: '#' },
-    ],
-  },
-  {
-    title: 'Resources',
-    links: [
-      { name: 'Help', href: '#' },
-      { name: 'Sales', href: '#' },
-      { name: 'Advertise', href: '#' },
-      { name: 'Privacy', href: '#' },
-    ],
-  },
-];
-
-const defaultSocialLinks = [
-  { icon: <FaInstagram className="size-5" />, href: '#', label: 'Instagram' },
-  { icon: <FaFacebook className="size-5" />, href: '#', label: 'Facebook' },
-  { icon: <FaTwitter className="size-5" />, href: '#', label: 'Twitter' },
-  { icon: <FaLinkedin className="size-5" />, href: '#', label: 'LinkedIn' },
-];
-
-const defaultLegalLinks = [
-  { name: 'Terms and Conditions', href: '#' },
-  { name: 'Privacy Policy', href: '#' },
-];
 
 const Footer = ({
   logo = {
@@ -78,33 +31,66 @@ const Footer = ({
     alt: 'logo',
     title: 'Delta Digivast',
   },
-  sections = defaultSections,
-  description = 'A collection of components for your startup business or side project.',
-  socialLinks = defaultSocialLinks,
-  copyright = '© 2024 Shadcnblocks.com. All rights reserved.',
-  legalLinks = defaultLegalLinks,
+  socialLinks = [
+    { icon: <FaInstagram className="size-5" />, href: '#', label: 'Instagram' },
+    { icon: <FaFacebook className="size-5" />, href: '#', label: 'Facebook' },
+    { icon: <FaTwitter className="size-5" />, href: '#', label: 'Twitter' },
+    { icon: <FaLinkedin className="size-5" />, href: '#', label: 'LinkedIn' },
+  ],
+  legalLinks = [
+    { name: 'Login', href: '/login' },
+    { name: 'Privacy Policy', href: '#' },
+  ],
+  copyright = '© 2026 Delta Digivast. All rights reserved.',
   className,
 }: FooterProps) => {
+  // Footer sections based on Navbar
+  const sections = [
+    {
+      title: 'Main Menu',
+      links: [
+        { name: 'Home', href: '/' },
+        { name: 'Portfolio', href: '/portfolio' },
+        { name: 'Blog', href: '/blog' },
+        { name: 'About Us', href: '/about-us' },
+        { name: 'Contact', href: '/contact' },
+      ],
+    },
+    {
+      title: 'Services',
+      links: [
+        { name: 'Videography', href: '/services/videography' },
+        { name: 'Photography', href: '/services/photography' },
+        { name: 'Digital Marketing', href: '/services/digital-marketing' },
+        {
+          name: 'Web Design & Development',
+          href: '/services/web-design-development',
+        },
+        { name: 'VSMM', href: '/services/vsmm' },
+      ],
+    },
+  ];
+
   return (
-    <section className={cn('pt-5 md:mt-7', className)}>
+    <section className={cn('pt-5 md:mt-7 bg-background', className)}>
       <div className="container mx-auto px-2 md:px-0">
         <div className="flex w-full flex-col justify-between gap-10 lg:flex-row lg:items-start lg:text-left">
+          {/* Logo & description */}
           <div className="flex w-full flex-col justify-between gap-6 lg:items-start">
-            {/* Logo */}
             <div className="flex items-center gap-2 lg:justify-start">
-              <a href={logo.url}>
+              <Link href={logo.url}>
                 <Image
                   src={logo.src}
                   width={24}
                   height={24}
                   className="max-h-6"
-                  alt="Delta Digivast"
+                  alt={logo.alt}
                 />
-              </a>
+              </Link>
               <h2 className="text-xl font-semibold">{logo.title}</h2>
             </div>
             <p className="max-w-[70%] text-sm text-muted-foreground">
-              {description}
+              Professional services and solutions for your business growth.
             </p>
             <ul className="flex items-center space-x-6 text-muted-foreground">
               {socialLinks.map((social, idx) => (
@@ -116,7 +102,9 @@ const Footer = ({
               ))}
             </ul>
           </div>
-          <div className="grid w-full gap-6 md:grid-cols-3 lg:gap-20">
+
+          {/* Sections */}
+          <div className="grid w-full gap-6 md:grid-cols-2 lg:gap-20">
             {sections.map((section, sectionIdx) => (
               <div key={sectionIdx}>
                 <h3 className="mb-4 font-bold">{section.title}</h3>
@@ -126,7 +114,7 @@ const Footer = ({
                       key={linkIdx}
                       className="font-medium hover:text-primary"
                     >
-                      <a href={link.href}>{link.name}</a>
+                      <Link href={link.href}>{link.name}</Link>
                     </li>
                   ))}
                 </ul>
@@ -134,12 +122,14 @@ const Footer = ({
             ))}
           </div>
         </div>
+
+        {/* Legal */}
         <div className="mt-8 flex flex-col justify-between gap-4 border-t py-8 text-xs font-medium text-muted-foreground md:flex-row md:items-center md:text-left">
           <p className="order-2 lg:order-1">{copyright}</p>
           <ul className="order-1 flex flex-col gap-2 md:order-2 md:flex-row">
             {legalLinks.map((link, idx) => (
               <li key={idx} className="hover:text-primary">
-                <a href={link.href}> {link.name}</a>
+                <Link href={link.href}>{link.name}</Link>
               </li>
             ))}
           </ul>
