@@ -5,11 +5,34 @@ import { Contact2 } from '@/components/layouts/contact2';
 import { Hero } from '@/components/layouts/hero';
 import HeroVideo from '@/components/layouts/HeroVideo';
 import { ServiceSection } from '@/components/layouts/ServiceSection';
+import ProjectCardHome from '@/components/module/comon/ProjectCardHome';
 import { getHeroData } from '@/service/hero.service';
-import React from 'react';
+
+type Project = {
+  id: string;
+  title: string;
+  description: string;
+  category: string;
+  imageUrl: string | null;
+  videoUrl: string | null;
+  createdAt: string;
+  updatedAt: string;
+};
+
+async function getProjects(): Promise<Project[]> {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/portfolio`,
+    {
+      cache: 'no-store',
+    },
+  );
+  const data = await res.json();
+  return data.data;
+}
 
 export default async function HomePage() {
   const data = await getHeroData();
+  const projects = await getProjects();
   const hero = data?.data;
   return (
     <div>
@@ -26,7 +49,8 @@ export default async function HomePage() {
       <HeroVideo></HeroVideo>
       <ServiceSection></ServiceSection>
       <ClientReview></ClientReview>
-      <Blog></Blog>
+      {/* Project Grid + Filter */}
+      <ProjectCardHome projects={projects} />
       <Contact2></Contact2>
     </div>
   );
