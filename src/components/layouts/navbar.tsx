@@ -1,15 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
-import {
-  LayoutDashboard,
-  LogOut,
-  MenuIcon,
-  Moon,
-  Settings,
-  Sun,
-  User,
-} from 'lucide-react';
+import { LayoutDashboard, LogOut, MenuIcon, Moon, Sun } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -88,12 +80,12 @@ const Navbar = ({ className }: NavbarProps) => {
         'Modern, responsive, and scalable website design and development tailored to your business needs.',
       href: '/services/web-design-development',
     },
-    {
-      title: 'VSMM',
-      description:
-        'Video & Social Media Marketing services to grow your brand visibility and engagement online.',
-      href: '/services/vsmm',
-    },
+    // {
+    //   title: 'VSMM',
+    //   description:
+    //     'Video & Social Media Marketing services to grow your brand visibility and engagement online.',
+    //   href: '/services/vsmm',
+    // },
   ];
   const router = useRouter();
 
@@ -219,6 +211,31 @@ const Navbar = ({ className }: NavbarProps) => {
                   Home
                 </NavigationMenuLink>
               </NavigationMenuItem>
+              <NavigationMenuItem>
+                <NavigationMenuLink
+                  href="/services"
+                  className={navigationMenuTriggerStyle()}
+                >
+                  <NavigationMenuTrigger>Services</NavigationMenuTrigger>
+                </NavigationMenuLink>
+
+                <NavigationMenuContent>
+                  <div className="grid w-[600px] grid-cols-2 p-3">
+                    {features.map(feature => (
+                      <NavigationMenuLink
+                        key={feature.title}
+                        href={feature.href}
+                        className="rounded-md p-3 transition-colors hover:bg-muted/70"
+                      >
+                        <p className="mb-1 font-semibold">{feature.title}</p>
+                        <p className="text-sm text-muted-foreground">
+                          {feature.description}
+                        </p>
+                      </NavigationMenuLink>
+                    ))}
+                  </div>
+                </NavigationMenuContent>
+              </NavigationMenuItem>
 
               <NavigationMenuItem>
                 <NavigationMenuLink
@@ -226,15 +243,6 @@ const Navbar = ({ className }: NavbarProps) => {
                   className={navigationMenuTriggerStyle()}
                 >
                   Portfolio
-                </NavigationMenuLink>
-              </NavigationMenuItem>
-
-              <NavigationMenuItem>
-                <NavigationMenuLink
-                  href="/blog"
-                  className={navigationMenuTriggerStyle()}
-                >
-                  Blog
                 </NavigationMenuLink>
               </NavigationMenuItem>
 
@@ -254,24 +262,14 @@ const Navbar = ({ className }: NavbarProps) => {
                   Contact
                 </NavigationMenuLink>
               </NavigationMenuItem>
+
               <NavigationMenuItem>
-                <NavigationMenuTrigger>Services</NavigationMenuTrigger>
-                <NavigationMenuContent>
-                  <div className="grid w-[600px] grid-cols-2 p-3">
-                    {features.map(feature => (
-                      <NavigationMenuLink
-                        key={feature.title}
-                        href={feature.href}
-                        className="rounded-md p-3 transition-colors hover:bg-muted/70"
-                      >
-                        <p className="mb-1 font-semibold">{feature.title}</p>
-                        <p className="text-sm text-muted-foreground">
-                          {feature.description}
-                        </p>
-                      </NavigationMenuLink>
-                    ))}
-                  </div>
-                </NavigationMenuContent>
+                <NavigationMenuLink
+                  href="/blog"
+                  className={navigationMenuTriggerStyle()}
+                >
+                  Blog
+                </NavigationMenuLink>
               </NavigationMenuItem>
             </NavigationMenuList>
           </NavigationMenu>

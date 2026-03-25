@@ -75,7 +75,7 @@ const Hero = ({
               <img
                 src={image.src}
                 alt={image.alt}
-                className="h-[400px] sm:h-[500px] lg:h-[545px]  w-full object-cover transition-transform duration-700 hover:scale-105"
+                className="h-[400px] sm:h-[500px]  w-full object-cover transition-transform duration-700 hover:scale-105"
                 loading="eager"
               />
             </div>
@@ -102,11 +102,11 @@ const Hero = ({
             )}
 
             {/* Main Heading */}
-            <h1 className="text-3xl font-bold tracking-tight text-balance sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl">
+            <h1 className="text-3xl font-bold tracking-tight text-balance sm:text-4xl md:text-5xl lg:text-6xl  bg-gradient-to-r from-lime-100 to-[#4fd100] bg-clip-text text-transparent">
               {heading}
-              <span className="block mt-2 bg-gradient-to-r from-lime-100 to-[#4fd100] bg-clip-text text-transparent">
+              {/* <span className="block mt-2 bg-gradient-to-r from-lime-100 to-[#4fd100] bg-clip-text text-transparent">
                 Your Success Partner
-              </span>
+              </span> */}
             </h1>
 
             {/* Description */}

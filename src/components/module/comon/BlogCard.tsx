@@ -32,13 +32,14 @@ export default function BlogCard({ blog }: Props) {
     >
       <div className="relative h-48 overflow-hidden bg-gray-100 dark:bg-gray-900">
         {blog.imageUrl ? (
-          <Image
-            src={blog.imageUrl}
-            alt={blog.title}
-            fill
-            className="object-cover group-hover:scale-105 transition-transform duration-500"
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          />
+          <div className="relative w-full max-w-[1080px] aspect-square">
+            <Image
+              src={blog.imageUrl}
+              alt={blog.title}
+              fill
+              className="object-cover group-hover:scale-105 transition-transform duration-500"
+            />
+          </div>
         ) : (
           <div className="w-full h-full flex items-center justify-center text-gray-400 dark:text-gray-600">
             No Image

@@ -1,4 +1,3 @@
-import { Blog } from '@/components/layouts/blog';
 import BrandLogoSection from '@/components/layouts/BrandLogoSection';
 import ClientReview from '@/components/layouts/ClientReview';
 import { Contact2 } from '@/components/layouts/contact2';
@@ -39,7 +38,7 @@ export default async function HomePage() {
       <Hero
         badge="Trusted by 200+ Brands Worldwide"
         heading={hero?.title}
-        description={hero?.description}
+        // description={hero?.description}
         image={{
           src: hero?.imageUrl,
           alt: hero?.heading,

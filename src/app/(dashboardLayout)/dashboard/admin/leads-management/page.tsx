@@ -24,6 +24,7 @@ interface Lead {
   status: 'new' | 'contacted' | 'qualified' | 'lost';
   source: 'website' | 'referral' | 'social' | 'campaign';
   date: string;
+  isViewed?: boolean;
 }
 
 export default function LeadsManagement() {
@@ -91,13 +92,31 @@ export default function LeadsManagement() {
 
       const token = getToken();
 
+      // 1️⃣ get lead details
       const res = await axios.get(`${API}/api/v1/leads/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
 
-      setSelectedLead(res.data.data || res.data);
+      const leadData = res.data.data || res.data;
+      setSelectedLead(leadData);
+
+      // 2️⃣ mark as viewed in backend
+      await axios.patch(
+        `${API}/api/v1/leads/${id}/view`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      // 3️⃣ update UI
+      setLeads(prev =>
+        prev.map(lead => (lead.id === id ? { ...lead, isViewed: true } : lead)),
+      );
     } catch (error) {
       console.log(error);
     } finally {
@@ -178,56 +197,92 @@ export default function LeadsManagement() {
               {filteredLeads.map(lead => (
                 <tr
                   key={lead.id}
-                  className="border-b hover:bg-gray-50 dark:hover:bg-gray-800 transition"
+                  className={`border-b transition-all duration-200
+    ${
+      !lead.isViewed
+        ? 'bg-gradient-to-r from-blue-50/80 to-transparent dark:from-blue-900/20 dark:to-transparent border-l-4 border-l-blue-500' // 👈 unread with left accent
+        : 'hover:bg-gray-50 dark:hover:bg-gray-800/50'
+    }
+  `}
                 >
-                  {/* NAME */}
-                  <td className="px-6 py-4 font-medium text-gray-900 dark:text-white">
-                    {lead.name}
+                  {/* NAME with indicator */}
+                  <td className="px-6 py-4">
+                    <div className="flex items-center gap-2">
+                      {!lead.isViewed && (
+                        <span className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
+                      )}
+                      <span
+                        className={`font-medium ${!lead.isViewed ? 'text-blue-700 dark:text-blue-400' : 'text-gray-900 dark:text-white'}`}
+                      >
+                        {lead.name}
+                      </span>
+                    </div>
                   </td>
 
-                  {/* EMAIL */}
-                  <td className="px-6 py-4 text-gray-600 dark:text-gray-300">
-                    <div className="flex items-center gap-2">
-                      <Mail size={14} />
+                  {/* EMAIL with enhanced styling */}
+                  <td className="px-6 py-4">
+                    <div
+                      className={`flex items-center gap-2 ${!lead.isViewed ? 'text-blue-600 dark:text-blue-400' : 'text-gray-600 dark:text-gray-300'}`}
+                    >
+                      <Mail
+                        size={14}
+                        className={!lead.isViewed ? 'text-blue-500' : ''}
+                      />
                       {lead.email}
                     </div>
                   </td>
 
                   {/* PHONE */}
-                  <td className="px-6 py-4 text-gray-600 dark:text-gray-300">
-                    <div className="flex items-center gap-2">
-                      <Phone size={14} />
+                  <td className="px-6 py-4">
+                    <div
+                      className={`flex items-center gap-2 ${!lead.isViewed ? 'text-blue-600 dark:text-blue-400' : 'text-gray-600 dark:text-gray-300'}`}
+                    >
+                      <Phone
+                        size={14}
+                        className={!lead.isViewed ? 'text-blue-500' : ''}
+                      />
                       {lead.phone}
                     </div>
                   </td>
 
                   {/* ADDRESS */}
-                  <td className="px-6 py-4 text-gray-600 dark:text-gray-300">
+                  <td
+                    className={`px-6 py-4 ${!lead.isViewed ? 'text-blue-700 dark:text-blue-400 font-medium' : 'text-gray-600 dark:text-gray-300'}`}
+                  >
                     {lead.from}
                   </td>
-                  {/* message */}
-                  <td className="px-6 py-4 text-gray-600 dark:text-gray-300">
+
+                  {/* MESSAGE/COMPANY */}
+                  <td
+                    className={`px-6 py-4 ${!lead.isViewed ? 'text-blue-700 dark:text-blue-400' : 'text-gray-600 dark:text-gray-300'}`}
+                  >
                     {lead.company}
                   </td>
 
                   {/* DATE */}
-                  <td className="px-6 py-4 text-gray-600 dark:text-gray-300">
+                  <td
+                    className={`px-6 py-4 ${!lead.isViewed ? 'text-blue-600 dark:text-blue-400 font-medium' : 'text-gray-600 dark:text-gray-300'}`}
+                  >
                     {formatDate(lead.date)}
                   </td>
 
-                  {/* ACTIONS */}
+                  {/* ACTIONS - enhanced for unread */}
                   <td className="px-6 py-4">
                     <div className="flex justify-end gap-2">
                       <button
                         onClick={() => handleView(lead.id)}
-                        className="p-2 rounded-md hover:bg-blue-100 text-blue-600 transition"
+                        className={`p-2 rounded-md transition-all duration-200 ${
+                          !lead.isViewed
+                            ? 'hover:bg-blue-100 text-blue-600 hover:scale-110 dark:hover:bg-blue-900/30'
+                            : 'hover:bg-blue-100 text-blue-600'
+                        }`}
                       >
                         <Eye size={16} />
                       </button>
 
                       <button
                         onClick={() => handleDelete(lead.id)}
-                        className="p-2 rounded-md hover:bg-red-100 text-red-600 transition"
+                        className="p-2 rounded-md hover:bg-red-100 text-red-600 transition-all duration-200 hover:scale-110"
                       >
                         <Trash2 size={16} />
                       </button>
