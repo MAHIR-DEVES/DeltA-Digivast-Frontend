@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import { getStoredUser } from '@/utils/auth.utils';
@@ -17,6 +18,7 @@ import {
   FiAward,
 } from 'react-icons/fi';
 import { toast } from 'sonner';
+import { FaMoneyBill } from 'react-icons/fa';
 
 export default function MyProfile() {
   const storedUser = getStoredUser();
@@ -25,6 +27,41 @@ export default function MyProfile() {
   const [loading, setLoading] = useState(false);
   const [edit, setEdit] = useState(false);
   const [imageHover, setImageHover] = useState(false);
+
+  const [oldPassword, setOldPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [loadingPassword, setLoadingPassword] = useState(false);
+
+  const handlePasswordChange = async () => {
+    if (newPassword !== confirmPassword) {
+      toast.error("New passwords don't match");
+      return;
+    }
+
+    try {
+      setLoadingPassword(true);
+      const token =
+        localStorage.getItem('accessToken') ||
+        sessionStorage.getItem('accessToken');
+      const res = await axios.put(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/users/${user.id}/password`,
+        { oldPassword, newPassword },
+        { headers: { Authorization: `Bearer ${token}` } },
+      );
+
+      if (res.data.success) {
+        toast.success('Password changed successfully');
+        setOldPassword('');
+        setNewPassword('');
+        setConfirmPassword('');
+      }
+    } catch (err: any) {
+      toast.error(err.response?.data?.message || err.message);
+    } finally {
+      setLoadingPassword(false);
+    }
+  };
 
   const [formData, setFormData] = useState({
     name: user?.name || '',
@@ -262,50 +299,105 @@ export default function MyProfile() {
                   </p>
                 )}
               </div>
+              {/* Salary */}
+              <div>
+                <div className="flex items-center space-x-2 mb-1">
+                  <FaMoneyBill className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+                  <span className="text-sm text-gray-500 dark:text-gray-400">
+                    Salary
+                  </span>
+                </div>
+                <p className="text-gray-900 dark:text-white ml-6">
+                  {user?.salary ? `${user.salary} BDT` : 'Not provided'}
+                </p>
+              </div>
+              {/* Skills Section */}
+              <div className="">
+                <div className="flex items-center space-x-2 mb-3">
+                  <FiAward className="w-5 h-5 text-gray-500 dark:text-gray-400" />
+                  <h3 className="font-medium text-gray-900 dark:text-white">
+                    Skills
+                  </h3>
+                </div>
+
+                {edit ? (
+                  <input
+                    name="skills"
+                    value={formData.skills}
+                    onChange={handleChange}
+                    className="w-full px-3 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="e.g., JavaScript, React, Node.js"
+                  />
+                ) : (
+                  <div className="flex flex-wrap gap-2">
+                    {user?.skills ? (
+                      user.skills
+                        .split(',')
+                        .map((skill: string, index: number) => (
+                          <span
+                            key={index}
+                            className="px-3 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full text-sm"
+                          >
+                            {skill.trim()}
+                          </span>
+                        ))
+                    ) : (
+                      <p className="text-gray-500 dark:text-gray-400 italic">
+                        No skills added
+                      </p>
+                    )}
+                  </div>
+                )}
+                {edit && (
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
+                    Separate skills with commas
+                  </p>
+                )}
+              </div>
             </div>
 
-            {/* Skills Section */}
+            {/* Password Change */}
             <div className="mt-8">
-              <div className="flex items-center space-x-2 mb-3">
-                <FiAward className="w-5 h-5 text-gray-500 dark:text-gray-400" />
-                <h3 className="font-medium text-gray-900 dark:text-white">
-                  Skills
-                </h3>
-              </div>
-
-              {edit ? (
+              <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4">
+                Change Password
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <input
-                  name="skills"
-                  value={formData.skills}
-                  onChange={handleChange}
-                  className="w-full px-3 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="e.g., JavaScript, React, Node.js"
+                  type="password"
+                  placeholder="Old Password"
+                  value={oldPassword}
+                  onChange={e => setOldPassword(e.target.value)}
+                  className="w-full px-3 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
                 />
-              ) : (
-                <div className="flex flex-wrap gap-2">
-                  {user?.skills ? (
-                    user.skills
-                      .split(',')
-                      .map((skill: string, index: number) => (
-                        <span
-                          key={index}
-                          className="px-3 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full text-sm"
-                        >
-                          {skill.trim()}
-                        </span>
-                      ))
-                  ) : (
-                    <p className="text-gray-500 dark:text-gray-400 italic">
-                      No skills added
-                    </p>
-                  )}
-                </div>
-              )}
-              {edit && (
-                <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
-                  Separate skills with commas
-                </p>
-              )}
+                <input
+                  type="password"
+                  placeholder="New Password"
+                  value={newPassword}
+                  onChange={e => setNewPassword(e.target.value)}
+                  className="w-full px-3 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
+                />
+                <input
+                  type="password"
+                  placeholder="Confirm New Password"
+                  value={confirmPassword}
+                  onChange={e => setConfirmPassword(e.target.value)}
+                  className="w-full px-3 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
+                />
+              </div>
+              <button
+                onClick={handlePasswordChange}
+                disabled={loadingPassword}
+                className="mt-4 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {loadingPassword ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    <span>Changing...</span>
+                  </>
+                ) : (
+                  <span>Change Password</span>
+                )}
+              </button>
             </div>
 
             {/* Action Buttons */}

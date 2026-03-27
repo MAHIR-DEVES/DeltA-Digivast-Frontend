@@ -71,26 +71,28 @@ export default function AttendanceManagement() {
   };
 
   const calculateStatus = (checkIn?: string, checkOut?: string) => {
-    if (!checkIn) return 'absent';
+    if (!checkIn) return 'absent'; // optional, later remove korte paro
 
     const checkInDate = new Date(checkIn);
 
     const officeStart = new Date(checkIn);
-
     officeStart.setHours(9, 0, 0, 0);
-
-    if (checkInDate > officeStart) return 'late';
 
     if (!checkOut) return 'working';
 
     const hours =
       (new Date(checkOut).getTime() - checkInDate.getTime()) / (1000 * 60 * 60);
 
-    if (hours >= 8) return 'present';
+    const isLate = checkInDate > officeStart;
+
+    // 🔥 MAIN LOGIC
+    if (hours >= 8) {
+      return isLate ? 'late-present' : 'present';
+    }
 
     if (hours >= 4) return 'half-day';
 
-    return 'present';
+    return 'incomplete';
   };
 
   const getStatusBadge = (status: string | undefined) => {
@@ -100,6 +102,18 @@ export default function AttendanceManagement() {
         text: 'text-green-700 dark:text-green-300',
         icon: CheckCircle,
         label: 'Present',
+      },
+      incomplete: {
+        bg: 'bg-red-100 dark:bg-red-900/30',
+        text: 'text-red-700 dark:text-red-300',
+        icon: XCircle,
+        label: 'Incomplete',
+      },
+      'late-present': {
+        bg: 'bg-yellow-100 dark:bg-yellow-900/30',
+        text: 'text-yellow-700 dark:text-yellow-300',
+        icon: Clock,
+        label: 'Late Present',
       },
       absent: {
         bg: 'bg-red-100 dark:bg-red-900/30',
@@ -111,7 +125,7 @@ export default function AttendanceManagement() {
         bg: 'bg-yellow-100 dark:bg-yellow-900/30',
         text: 'text-yellow-700 dark:text-yellow-300',
         icon: Clock,
-        label: 'Late',
+        label: 'Late Present',
       },
       'half-day': {
         bg: 'bg-orange-100 dark:bg-orange-900/30',

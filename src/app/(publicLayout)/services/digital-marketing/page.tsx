@@ -187,7 +187,7 @@ export default function MarketingPage() {
     <div className="min-h-screen bg-white dark:bg-black transition-colors duration-300">
       {/* Hero Section with Image */}
       <section className="relative overflow-hidden bg-white dark:bg-black">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-24">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             {/* Left Content */}
             <div>
@@ -270,8 +270,8 @@ export default function MarketingPage() {
                 <Image
                   src="https://images.unsplash.com/photo-1557804506-669a67965ba0?q=80&w=1000"
                   alt="Digital Marketing Team"
-                  width={600}
-                  height={400}
+                  width={400}
+                  height={200}
                   className="w-full h-auto object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-tr from-[#6efd0b]/20 to-transparent"></div>

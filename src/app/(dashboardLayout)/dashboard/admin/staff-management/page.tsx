@@ -14,6 +14,7 @@ import {
 import axios from 'axios';
 import ViewStaffModal from '@/components/module/admin/ViewStaffModal';
 import Loading from '@/components/module/shared/loading';
+import { toast } from 'sonner';
 
 interface Staff {
   id?: string;
@@ -26,8 +27,10 @@ interface Staff {
   role: string;
   designation?: string;
   skills?: string;
+  salary?: number;
   experience?: number;
   department: string;
+  joiningDate?: string;
   status: 'ACTIVE' | 'INACTIVE' | 'ON_LEAVE';
   lastLogin?: string;
 }
@@ -51,7 +54,9 @@ export default function StaffManagement() {
     role: '',
     designation: '',
     skills: '',
+    salary: 0,
     experience: 0,
+
     department: '',
     status: 'ACTIVE',
     lastLogin: new Date().toISOString(),
@@ -94,10 +99,13 @@ export default function StaffManagement() {
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     const { name, value } = e.target;
-    if (name === 'experience') {
+    if (name === 'experience' || name === 'salary') {
       setFormData({ ...formData, [name]: value === '' ? 0 : parseInt(value) });
     } else {
       setFormData({ ...formData, [name]: value });
+    }
+    if (name === 'joiningDate') {
+      setFormData({ ...formData, joiningDate: value });
     }
   };
 
@@ -118,8 +126,8 @@ export default function StaffManagement() {
       fetchUsers();
       resetForm();
     } catch (err) {
-      console.error(err);
-      alert('Error saving staff');
+      console.log(err);
+      toast.error('Error saving staff');
     }
   };
 
@@ -170,6 +178,7 @@ export default function StaffManagement() {
       role: '',
       designation: '',
       skills: '',
+      salary: 0,
       experience: 0,
       department: '',
       status: 'ACTIVE',
@@ -321,6 +330,21 @@ export default function StaffManagement() {
               onChange={handleInputChange}
               className="px-4 py-2 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#6efd0b]/50 focus:border-transparent"
             />
+            <input
+              type="date"
+              name="joiningDate"
+              value={formData.joiningDate?.slice(0, 10) || ''}
+              onChange={handleInputChange}
+              className="px-4 py-2 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700"
+            />
+            <input
+              type="number"
+              name="salary"
+              placeholder="Salary (BDT)"
+              value={formData.salary}
+              onChange={handleInputChange}
+              className="px-4 py-2 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#6efd0b]/50 focus:border-transparent"
+            />
           </div>
           <div className="flex items-center justify-end gap-3 mt-4">
             <button
@@ -349,6 +373,9 @@ export default function StaffManagement() {
               <thead className="bg-gray-50 dark:bg-gray-800/50">
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">
+                    id
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">
                     Name
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">
@@ -359,6 +386,12 @@ export default function StaffManagement() {
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">
                     Department
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">
+                    Salary
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">
+                    Joining Date
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">
                     Status
@@ -374,6 +407,9 @@ export default function StaffManagement() {
                     key={member.id}
                     className="hover:bg-gray-50 dark:hover:bg-gray-800/50"
                   >
+                    <td className="px-6 py-4 font-medium text-gray-900 dark:text-white">
+                      {member.employeeId}
+                    </td>
                     <td className="px-6 py-4 font-medium text-gray-900 dark:text-white">
                       {member.name}
                     </td>
@@ -392,6 +428,14 @@ export default function StaffManagement() {
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-700 dark:text-gray-300">
                       {member.department}
+                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-700 dark:text-gray-300">
+                      {member.salary ? ` ${member.salary}` : 'N/A'} BDT
+                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-700 dark:text-gray-300">
+                      {member.joiningDate
+                        ? new Date(member.joiningDate).toLocaleDateString()
+                        : 'N/A'}
                     </td>
                     <td className="px-6 py-4">
                       <span

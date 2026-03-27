@@ -19,7 +19,12 @@ type Props = {
   projects: Project[];
 };
 
-const categories = ['all', 'video', 'web', 'design', 'Frontend Design'];
+const categories = [
+  'Video Content',
+  'Graphical Content',
+  'Campaign Result',
+  'Website',
+];
 
 export default function ProjectGrid({ projects }: Props) {
   const [filter, setFilter] = React.useState<'all' | string>('all');
@@ -53,19 +58,22 @@ export default function ProjectGrid({ projects }: Props) {
       {/* Grid */}
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5 pb-3">
         {filteredProjects.map(project => (
-          <Link
-            key={project.id}
-            href={`/portfolio/${project.id}`}
-            className="group block bg-white dark:bg-black rounded-md shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border border-border"
-          >
+          // <Link
+          //   key={project.id}
+          //   href={`/portfolio/${project.id}`}
+          //   className="group block bg-white dark:bg-black rounded-md shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border border-border"
+          // >
+          <div key={project.id} className="">
             <div className="relative h-48 overflow-hidden">
               {project.imageUrl ? (
-                <Image
-                  src={project.imageUrl}
-                  alt={project.title}
-                  fill
-                  className="object-cover group-hover:scale-110 transition-transform duration-500"
-                />
+                <div className="relative w-full max-w-[1080px] aspect-square">
+                  <Image
+                    src={project.imageUrl}
+                    alt={project.title}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                </div>
               ) : project.videoUrl ? (
                 <iframe
                   src={
@@ -95,7 +103,8 @@ export default function ProjectGrid({ projects }: Props) {
                 {project.description}
               </p>
             </div>
-          </Link>
+          </div>
+          // </Link>
         ))}
       </div>
     </section>

@@ -17,21 +17,25 @@ import {
   Trash2,
   Eye,
   Search,
-  Filter,
   Grid,
   List,
   Upload,
   Loader2,
   FolderOpen,
   ExternalLink,
+  BarChart,
 } from 'lucide-react';
 import Loading from '@/components/module/shared/loading';
 
 interface PortfolioItem {
   id: string;
   title: string;
-  category: 'design' | 'Frontend Design' | 'video' | 'web';
-  type: 'image' | 'video';
+  category:
+    | 'Video Content'
+    | 'Graphical Content'
+    | 'Campaign Result'
+    | 'Website';
+  type: 'image' | 'video content';
   url: string;
   description?: string;
 }
@@ -54,11 +58,12 @@ export default function PortfolioManagement() {
 
   const [newItem, setNewItem] = useState<Partial<PortfolioItem>>({
     title: '',
-    category: 'design',
+    category: 'Graphical Content',
     type: 'image',
     url: '',
     description: '',
   });
+
   const [editItem, setEditItem] = useState<PortfolioItem | null>(null);
 
   const API_BASE = `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/portfolio`;
@@ -80,7 +85,7 @@ export default function PortfolioManagement() {
           id: item.id,
           title: item.title,
           category: item.category,
-          type: item.imageUrl ? 'image' : 'video',
+          type: item.imageUrl ? 'image' : 'video content',
           url: item.imageUrl || item.videoUrl,
           description: item.description || '',
         })),
@@ -138,7 +143,7 @@ export default function PortfolioManagement() {
 
   const handleAddItem = async () => {
     if (!newItem.title) return toast.error('Title is required');
-    if (newItem.type === 'video' && !newItem.url)
+    if (newItem.type === 'video content' && !newItem.url)
       return toast.error('Video URL is required');
     if (newItem.type === 'image' && !file)
       return toast.error('Image file is required');
@@ -158,7 +163,7 @@ export default function PortfolioManagement() {
         category: newItem.category,
         description: newItem.description || '',
         imageUrl: newItem.type === 'image' ? imageUrl : null,
-        videoUrl: newItem.type === 'video' ? newItem.url : null,
+        videoUrl: newItem.type === 'video content' ? newItem.url : null,
       };
 
       const res = await axios.post(API_BASE, body, {
@@ -207,7 +212,7 @@ export default function PortfolioManagement() {
   const resetForm = () => {
     setNewItem({
       title: '',
-      category: 'design',
+      category: 'Graphical Content',
       type: 'image',
       url: '',
       description: '',
@@ -219,13 +224,13 @@ export default function PortfolioManagement() {
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
-      case 'design':
+      case 'Graphical Content':
         return <ImageIcon size={16} className="text-blue-500" />;
-      case 'Frontend Design':
-        return <ImageIcon size={16} className="text-purple-500" />;
-      case 'video':
+      case 'Video Content':
         return <Video size={16} className="text-red-500" />;
-      case 'web':
+      case 'Campaign Result':
+        return <BarChart size={16} className="text-yellow-500" />;
+      case 'Website':
         return <LinkIcon size={16} className="text-green-500" />;
       default:
         return null;
@@ -234,19 +239,18 @@ export default function PortfolioManagement() {
 
   const getCategoryColor = (category: string) => {
     switch (category) {
-      case 'design':
-        return 'bg-blue-100 text-blue-700 dark:bg-blue-500/20 dark:text-blue-400';
-      case 'Frontend Design':
-        return 'bg-purple-100 text-purple-700 dark:bg-purple-500/20 dark:text-purple-400';
-      case 'video':
-        return 'bg-red-100 text-red-700 dark:bg-red-500/20 dark:text-red-400';
-      case 'web':
-        return 'bg-green-100 text-green-700 dark:bg-green-500/20 dark:text-green-400';
+      case 'Graphical Content':
+        return 'bg-blue-100 text-blue-700';
+      case 'Video Content':
+        return 'bg-red-100 text-red-700';
+      case 'Campaign Result':
+        return 'bg-yellow-100 text-yellow-700';
+      case 'Website':
+        return 'bg-green-100 text-green-700';
       default:
         return 'bg-gray-100 text-gray-700';
     }
   };
-
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 ">
       <div className="">
@@ -318,48 +322,47 @@ export default function PortfolioManagement() {
                     <div className="grid grid-cols-2 gap-4">
                       <div>
                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                          Category
+                          {' '}
+                          Category{' '}
                         </label>
                         <select
                           name="category"
                           value={newItem.category}
                           onChange={handleInputChange}
-                          className="w-full px-4 py-3 rounded-xl
-                                   bg-gray-50 dark:bg-gray-800
-                                   border border-gray-300 dark:border-gray-700
-                                   text-gray-900 dark:text-white
-                                   focus:outline-none focus:ring-2 focus:ring-[#6efd0b]/50 focus:border-transparent"
+                          className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#6efd0b]/50 focus:border-transparent"
                         >
-                          <option value="design">Graphic Design</option>
-                          <option value="Frontend Design">
-                            Frontend Design
+                          <option value="Graphical Content">
+                            Graphical Content
                           </option>
-                          <option value="video">Video Production</option>
-                          <option value="web">Web Development</option>
+                          <option value="Video Content">Video Content</option>
+                          <option value="Campaign Result">
+                            Campaign Result
+                          </option>
+                          <option value="Website">Website</option>
                         </select>
                       </div>
-
                       <div>
                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                           Type
                         </label>
+
                         <select
                           name="type"
                           value={newItem.type}
                           onChange={handleInputChange}
-                          className="w-full px-4 py-3 rounded-xl
-                                   bg-gray-50 dark:bg-gray-800
-                                   border border-gray-300 dark:border-gray-700
-                                   text-gray-900 dark:text-white
-                                   focus:outline-none focus:ring-2 focus:ring-[#6efd0b]/50 focus:border-transparent"
+                          className="w-full px-4 py-3 rounded-xl 
+      bg-gray-50 dark:bg-gray-800 
+      border border-gray-300 dark:border-gray-700 
+      text-gray-900 dark:text-white 
+      focus:outline-none focus:ring-2 focus:ring-[#6efd0b]/50"
                         >
                           <option value="image">Image</option>
-                          <option value="video">Video</option>
+                          <option value="video content">Video</option>
                         </select>
                       </div>
                     </div>
 
-                    {newItem.type === 'video' ? (
+                    {newItem.type === 'video content' ? (
                       <div>
                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                           Video URL *
@@ -444,7 +447,7 @@ export default function PortfolioManagement() {
                       </div>
                     )}
 
-                    {newItem.type === 'video' && newItem.url && (
+                    {newItem.type === 'video content' && newItem.url && (
                       <div className="aspect-video rounded-lg overflow-hidden border-2 border-gray-200 dark:border-gray-700 bg-gray-900 flex items-center justify-center">
                         <Video size={48} className="text-gray-600" />
                       </div>
@@ -542,10 +545,10 @@ export default function PortfolioManagement() {
                        focus:outline-none focus:ring-2 focus:ring-[#6efd0b]/50 focus:border-transparent"
             >
               <option value="all">All Categories</option>
-              <option value="design">Graphic Design</option>
-              <option value="Frontend Design">Frontend Design</option>
-              <option value="video">Video</option>
-              <option value="web">Web</option>
+              <option value="Graphical Content">Graphical Content</option>
+              <option value="Video Content">Video Content</option>
+              <option value="Campaign Result">Campaign Result</option>
+              <option value="Website">Website</option>
             </select>
 
             <div className="flex bg-white dark:bg-gray-900 rounded-md border border-gray-300 dark:border-gray-700 overflow-hidden">
@@ -584,26 +587,30 @@ export default function PortfolioManagement() {
             </p>
           </div>
           <div className="bg-white dark:bg-gray-900 rounded-xl p-4 border border-gray-200 dark:border-gray-800">
-            <p className="text-sm text-gray-500 dark:text-gray-400">Design</p>
-            <p className="text-2xl font-bold text-blue-600">
+            <p className="text-sm">Graphical</p>
+            {
+              portfolioItems.filter(i => i.category === 'Graphical Content')
+                .length
+            }
+          </div>
+          <div className="bg-white dark:bg-gray-900 rounded-xl p-4 border border-gray-200 dark:border-gray-800">
+            <p className="text-sm text-gray-500 dark:text-gray-400">Video</p>
+            {/* Video */}
+            <p className="text-2xl font-bold text-red-600">
               {
-                portfolioItems.filter(
-                  i =>
-                    i.category === 'design' || i.category === 'Frontend Design',
-                ).length
+                portfolioItems.filter(i => i.category === 'Video Content')
+                  .length
               }
             </p>
           </div>
           <div className="bg-white dark:bg-gray-900 rounded-xl p-4 border border-gray-200 dark:border-gray-800">
-            <p className="text-sm text-gray-500 dark:text-gray-400">Video</p>
-            <p className="text-2xl font-bold text-red-600">
-              {portfolioItems.filter(i => i.category === 'video').length}
-            </p>
-          </div>
-          <div className="bg-white dark:bg-gray-900 rounded-xl p-4 border border-gray-200 dark:border-gray-800">
-            <p className="text-sm text-gray-500 dark:text-gray-400">Web</p>
-            <p className="text-2xl font-bold text-green-600">
-              {portfolioItems.filter(i => i.category === 'web').length}
+            <p className="text-sm text-gray-500 dark:text-gray-400">Campaign</p>
+            {/* Campaign */}
+            <p className="text-2xl font-bold text-yellow-600">
+              {
+                portfolioItems.filter(i => i.category === 'Campaign Result')
+                  .length
+              }
             </p>
           </div>
         </div>
