@@ -245,6 +245,14 @@ const Navbar = ({ className }: NavbarProps) => {
                   Portfolio
                 </NavigationMenuLink>
               </NavigationMenuItem>
+              <NavigationMenuItem>
+                <NavigationMenuLink
+                  href="/courses"
+                  className={navigationMenuTriggerStyle()}
+                >
+                  Course
+                </NavigationMenuLink>
+              </NavigationMenuItem>
 
               <NavigationMenuItem>
                 <NavigationMenuLink

@@ -197,7 +197,7 @@ export default function DashboardNavbar({
               >
                 {user?.photoUrl ? (
                   <Image
-                    src={user.photoUrl}
+                    src={user?.photoUrl}
                     width={36}
                     height={36}
                     alt={user?.name || 'User'}
