@@ -14,7 +14,7 @@ interface HeroData {
   imageUrl: string | null;
 }
 
-const HERO_ID = '58b384ac-f06b-4b18-8429-18771238ede0'; // fixed id
+const HERO_ID = '3b67800f-77e6-43e6-a132-3b2c230d628e'; // fixed id
 
 export default function HeroManagement() {
   const [heroData, setHeroData] = useState<HeroData>({
@@ -22,6 +22,8 @@ export default function HeroManagement() {
     description: '',
     imageUrl: null,
   });
+  console.log(heroData);
+
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [loading, setLoading] = useState(true);

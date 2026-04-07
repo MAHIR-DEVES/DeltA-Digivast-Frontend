@@ -1,6 +1,6 @@
 export const getHeroData = async () => {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/hero/58b384ac-f06b-4b18-8429-18771238ede0`,
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/hero/3b67800f-77e6-43e6-a132-3b2c230d628e`,
     {
       cache: 'no-store', // always fresh data
     },
