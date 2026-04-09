@@ -3,17 +3,15 @@ import {
   Calendar,
   ArrowLeft,
   Clock,
-  Users,
   BookOpen,
-  DollarSign,
   User,
   Tag,
   Star,
   Play,
   Award,
-  ChevronRight,
 } from 'lucide-react';
 import Image from 'next/image';
+import EnrollButton from './EnrollButton';
 
 interface Course {
   id: string;
@@ -83,12 +81,6 @@ export default async function CoursesDetailPage({ params }: Props) {
       </div>
     );
   }
-
-  // Safe formatter with fallback values
-  const formatNumber = (num: number | undefined | null) => {
-    if (num === undefined || num === null) return '0';
-    return num.toLocaleString();
-  };
 
   const formatDate = (date: string | undefined) => {
     if (!date) return 'Not scheduled';
@@ -231,28 +223,11 @@ export default async function CoursesDetailPage({ params }: Props) {
 
               {/* Price & CTA */}
               <div className=" w-full pt-4 md:pt-6">
-                <button
-                  className={`w-full  px-6 md:px-8 py-3 md:py-4 rounded-xl md:rounded-2xl font-semibold  ${
-                    course.status === 'PUBLISHED'
-                      ? 'bg-gradient-to-r from-[#6efd0b] to-green-500 text-gray-900 '
-                      : 'bg-gray-300 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed'
-                  }`}
-                  disabled={course.status !== 'PUBLISHED'}
-                >
-                  <span className="relative z-10 flex items-center justify-center gap-2 text-sm md:text-base">
-                    {course.status === 'PUBLISHED' ? (
-                      <>
-                        Enroll Now
-                        <ChevronRight
-                          size={16}
-                          className="group-hover:translate-x-1 transition-transform"
-                        />
-                      </>
-                    ) : (
-                      'Coming Soon'
-                    )}
-                  </span>
-                </button>
+                <EnrollButton
+                  courseId={course.id}
+                  price={course.price}
+                  status={course.status}
+                />
               </div>
             </div>
 
