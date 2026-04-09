@@ -69,7 +69,7 @@ export default function CoursesPage() {
           <div
             key={course.id}
             onClick={() => router.push(`/courses/${course.id}`)}
-            className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
+            className="bg-white dark:bg-black rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
           >
             {/* Course Image */}
             <div className="h-48 bg-gray-200 dark:bg-gray-700">

@@ -23,9 +23,19 @@ export default function Sidebar({
   const user = getStoredUser();
   const pathname = usePathname();
   const [mounted, setMounted] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
     setMounted(true);
+  }, []);
+
+  // Handle scroll effect
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 10);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   if (!user || !mounted) return null;
@@ -64,8 +74,8 @@ export default function Sidebar({
       {/* Logo Section */}
       <div
         className={`
-        flex items-center h-16 px-4 border-b border-gray-200 dark:border-gray-800
-        ${isCollapsed ? 'justify-center' : 'justify-between'}
+        flex items-center h-16 px-4 border-b border-gray-200 dark:border-gray-800 sticky top-0 bg-white dark:bg-gray-900 z-20
+        ${isCollapsed ? 'justify-center' : 'justify-between'} ${isScrolled ? 'shadow-md' : ''}
         flex-shrink-0
       `}
       >

@@ -73,8 +73,6 @@ export default function MyProfile() {
     designation: user?.designation || '',
     photoUrl: user?.photoUrl || '',
     salary: user?.salary || 0, // নতুন
-    password: '', // নতুন, password change input
-    confirmPassword: '', // নতুন, confirm password
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -116,6 +114,7 @@ export default function MyProfile() {
         toast.success('Profile Successfully Updated  ');
         setEdit(false);
       }
+      console.log(res);
     } catch (error) {
       console.log(error);
     }
@@ -420,8 +419,6 @@ export default function MyProfile() {
                         designation: user?.designation || '',
                         photoUrl: user?.photoUrl || '',
                         salary: user?.salary || 0,
-                        password: '',
-                        confirmPassword: '',
                       });
                     }}
                     className="px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-200 flex items-center space-x-2"

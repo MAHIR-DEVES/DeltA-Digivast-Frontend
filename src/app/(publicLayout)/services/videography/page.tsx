@@ -1,6 +1,5 @@
 'use client';
 
-import React, { useState } from 'react';
 import Image from 'next/image';
 import {
   Play,
@@ -8,20 +7,15 @@ import {
   Film,
   Video,
   Clapperboard,
-  Sparkles,
   Calendar,
   Users,
   Star,
-  ChevronRight,
   Phone,
   Mail,
-  CheckCircle,
   Award,
 } from 'lucide-react';
 
 export default function VideographyPage() {
-  const [activeVideo, setActiveVideo] = useState<number | null>(null);
-
   const services = [
     {
       icon: Film,
@@ -87,17 +81,6 @@ export default function VideographyPage() {
     },
   ];
 
-  const equipment = [
-    'RED Komodo 6K',
-    'Sony FX6',
-    'Canon C300 Mark III',
-    'DJI Ronin 4D',
-    'Zeiss CP.3 Lenses',
-    'ARRI Lighting',
-    'Drone Mavic 3 Pro',
-    'Pro Tools Sound',
-  ];
-
   return (
     <div className="min-h-screen bg-white dark:bg-black transition-colors duration-300">
       {/* Hero Section */}
@@ -148,7 +131,7 @@ export default function VideographyPage() {
             <div className="relative">
               <div className="relative rounded-2xl overflow-hidden shadow-2xl aspect-video">
                 <Image
-                  src="https://images.unsplash.com/photo-1574717024453-354056afaffc?q=80&w=1000"
+                  src="https://plus.unsplash.com/premium_photo-1663040316559-8684ca45d7e9?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                   alt="Video"
                   fill
                   className="object-cover"
@@ -264,10 +247,6 @@ export default function VideographyPage() {
                     />
                   ))}
                 </div>
-
-                <p className="text-sm text-gray-600 dark:text-gray-400 italic">
-                  "{t.content}"
-                </p>
               </div>
             ))}
           </div>
@@ -282,7 +261,8 @@ export default function VideographyPage() {
           </h2>
 
           <p className="text-xl text-gray-600 dark:text-gray-400 mb-8">
-            Let's discuss your vision and create something amazing together.
+            Let&apos;s discuss your vision and create something amazing
+            together.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">

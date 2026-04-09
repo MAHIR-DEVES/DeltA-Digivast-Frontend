@@ -119,13 +119,16 @@ export default function DashboardNavbar({
     <>
       <nav
         className={`
-          fixed top-0 right-0 z-30 h-16
-          bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl
-          border-b border-gray-200 dark:border-gray-800
-          flex items-center px-3 sm:px-4 lg:px-6
-          transition-all duration-300
-          ${isScrolled ? 'shadow-md' : ''}
-        `}
+  fixed top-0 right-0 z-10 h-16
+  bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl
+  
+  border border-gray-200 dark:border-gray-800
+  !border-l-0
+  
+  flex items-center px-3 sm:px-4 lg:px-6
+  transition-all duration-300
+  ${isScrolled ? 'shadow-md' : ''}
+`}
         style={{
           left: isMobile ? 0 : sidebarCollapsed ? 80 : 280,
         }}
