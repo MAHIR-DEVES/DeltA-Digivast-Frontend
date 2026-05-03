@@ -4,6 +4,7 @@ import { Contact2 } from '@/components/layouts/contact2';
 import { Hero } from '@/components/layouts/hero';
 import HeroVideo from '@/components/layouts/HeroVideo';
 import { ServiceSection } from '@/components/layouts/ServiceSection';
+import { FAQ } from '@/components/layouts/FAQ';
 import ProjectCardHome from '@/components/module/comon/ProjectCardHome';
 import { getHeroData } from '@/service/hero.service';
 
@@ -50,6 +51,7 @@ export default async function HomePage() {
       <ClientReview></ClientReview>
       {/* Project Grid + Filter */}
       <ProjectCardHome projects={projects} />
+      <FAQ />
       <Contact2></Contact2>
     </div>
   );
