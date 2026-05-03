@@ -295,8 +295,10 @@ const Navbar = ({ className }: NavbarProps) => {
               >
                 {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
               </button>
-              {/* <Button
-                className="
+              {!user && (
+                <Link href={'/login'}>
+                  <Button
+                    className="
     bg-gradient-to-r
     from-[#6efd0b] via-[#8bff3a] to-[#4fd100]
     text-black
@@ -305,9 +307,11 @@ const Navbar = ({ className }: NavbarProps) => {
     hover:opacity-90
     transition
   "
-              >
-                Free Consultation
-              </Button> */}
+                  >
+                    Login
+                  </Button>
+                </Link>
+              )}
 
               {mounted && user && (
                 <DropdownMenu>
