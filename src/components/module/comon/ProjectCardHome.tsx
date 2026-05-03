@@ -1,7 +1,6 @@
 'use client';
 import React from 'react';
 import Image from 'next/image';
-import { Layers } from 'lucide-react';
 import Link from 'next/link';
 
 type Project = {

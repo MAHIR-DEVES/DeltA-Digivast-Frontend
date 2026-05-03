@@ -134,21 +134,16 @@ const FAQ = ({ className }: FAQProps) => {
       <div className="container mx-auto px-4 sm:px-6">
         {/* Header */}
         <div className="space-y-4 text-center mb-12">
-          <div className="flex items-center justify-center gap-2">
-            <div className="rounded-full bg-gradient-to-r from-lime-500/10 to-green-500/10 p-3">
-              <HelpCircle className="h-6 w-6 text-lime-600 dark:text-lime-400" />
-            </div>
-          </div>
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight">
             Frequently Asked{' '}
             <span className="bg-gradient-to-r from-lime-500 to-green-600 bg-clip-text text-transparent">
               Questions
             </span>
           </h2>
-          <p className="mx-auto max-w-2xl text-base md:text-lg text-muted-foreground">
+          {/* <p className="mx-auto max-w-2xl text-base md:text-lg text-muted-foreground">
             Find answers to common questions about our services, courses, and
             team management system.
-          </p>
+          </p> */}
         </div>
 
         {/* Category Filter */}
@@ -240,25 +235,6 @@ const FAQ = ({ className }: FAQProps) => {
             ))}
           </AnimatePresence>
         </div>
-
-        {/* CTA Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          viewport={{ once: true }}
-          className="mt-16 text-center"
-        >
-          <p className="text-muted-foreground mb-4">
-            Didn&apos;t find what you&apos;re looking for?
-          </p>
-          <a
-            href="/contact"
-            className="inline-flex items-center justify-center px-6 py-3 rounded-lg font-medium bg-gradient-to-r from-lime-500 to-green-600 text-black hover:shadow-lg transition-all duration-300 hover:scale-105"
-          >
-            Contact Us
-          </a>
-        </motion.div>
       </div>
     </section>
   );

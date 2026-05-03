@@ -19,9 +19,8 @@ interface Contact2Props {
 const Contact2 = ({
   title = 'Contact Us',
   description = 'We are available for questions, feedback, or collaboration opportunities. Let us know how we can help!',
-  phone = '(123) 34567890',
-  email = 'email@example.com',
-  web = { label: 'shadcnblocks.com', url: 'https://shadcnblocks.com' },
+  phone = '+880 1700-938429',
+  email = 'deltadigivast@gmail.com',
   className,
 }: Contact2Props) => {
   const [loading, setLoading] = useState(false);
@@ -94,12 +93,6 @@ const Contact2 = ({
                   <span className="font-bold">Email: </span>
                   <a href={`mailto:${email}`} className="underline ml-1">
                     {email}
-                  </a>
-                </li>
-                <li>
-                  <span className="font-bold">Web: </span>
-                  <a href={web.url} target="_blank" className="underline ml-1">
-                    {web.label}
                   </a>
                 </li>
               </ul>
