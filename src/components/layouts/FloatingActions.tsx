@@ -2,10 +2,17 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import {
-  MessageCircle, Bot, X, Send, Sparkles, User,
-  RotateCcw, Minimize2,
+  MessageCircle,
+  Bot,
+  X,
+  Send,
+  Sparkles,
+  User,
+  RotateCcw,
+  Minimize2,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { chatbotService } from '@/service/chatbot.service';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 interface Message {
@@ -23,20 +30,44 @@ const GREETING: Message = {
 };
 
 function now() {
-  return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  return new Date().toLocaleTimeString([], {
+    hour: '2-digit',
+    minute: '2-digit',
+  });
 }
 
-// Fake AI reply – replace with your real API call
-async function fakeReply(question: string): Promise<string> {
-  await new Promise((r) => setTimeout(r, 1200 + Math.random() * 800));
-  const replies: Record<string, string> = {
-    default: "That's a great question! Our team will get back to you shortly. In the meantime, feel free to explore our services or contact us on WhatsApp.",
-  };
-  if (question.toLowerCase().includes('price') || question.toLowerCase().includes('cost'))
-    return `💰 Pricing depends on your specific needs. Please share more details and we'll prepare a custom quote for you!`;
-  if (question.toLowerCase().includes('hello') || question.toLowerCase().includes('hi'))
-    return '👋 Hello! Great to see you. How can I assist you today?';
-  return replies.default;
+// Call the chatbot API with the latest user message
+async function getChatbotReply(
+  messages: Array<{
+    id: string;
+    role: 'user' | 'ai';
+    text: string;
+    time: string;
+  }>,
+): Promise<string> {
+  try {
+    // Get the latest user message
+    const latestUserMessage = messages.filter(msg => msg.role === 'user').pop();
+
+    if (!latestUserMessage) {
+      throw new Error('No user message found');
+    }
+
+    const apiMessages = [
+      {
+        role: 'user' as const,
+        content: latestUserMessage.text,
+      },
+    ];
+
+    const reply = await chatbotService.sendMessage(apiMessages);
+    return reply;
+  } catch (error) {
+    const errorMessage =
+      error instanceof Error ? error.message : 'Failed to get response';
+    console.error('Chatbot API error:', errorMessage);
+    return "Sorry, I couldn't process your request. Please try again or contact us on WhatsApp for immediate assistance.";
+  }
 }
 
 // ─── Variants ────────────────────────────────────────────────────────────────
@@ -47,18 +78,24 @@ const containerVariants = {
 const itemVariants = {
   hidden: { opacity: 0, x: 40, scale: 0.8 },
   visible: {
-    opacity: 1, x: 0, scale: 1,
+    opacity: 1,
+    x: 0,
+    scale: 1,
     transition: { type: 'spring' as const, stiffness: 260, damping: 20 },
   },
 };
 const modalVariants = {
   hidden: { opacity: 0, scale: 0.85, y: 20, originX: 1, originY: 1 },
   visible: {
-    opacity: 1, scale: 1, y: 0,
+    opacity: 1,
+    scale: 1,
+    y: 0,
     transition: { type: 'spring' as const, stiffness: 300, damping: 28 },
   },
   exit: {
-    opacity: 0, scale: 0.85, y: 20,
+    opacity: 0,
+    scale: 0.85,
+    y: 20,
     transition: { duration: 0.18 },
   },
 };
@@ -89,14 +126,25 @@ function ChatModal({ onClose }: { onClose: () => void }) {
     const text = input.trim();
     if (!text || isTyping) return;
 
-    const userMsg: Message = { id: crypto.randomUUID(), role: 'user', text, time: now() };
-    setMessages((prev) => [...prev, userMsg]);
+    const userMsg: Message = {
+      id: crypto.randomUUID(),
+      role: 'user',
+      text,
+      time: now(),
+    };
+    const updatedMessages = [...messages, userMsg];
+    setMessages(updatedMessages);
     setInput('');
     setIsTyping(true);
 
-    const reply = await fakeReply(text);
-    const aiMsg: Message = { id: crypto.randomUUID(), role: 'ai', text: reply, time: now() };
-    setMessages((prev) => [...prev, aiMsg]);
+    const reply = await getChatbotReply(updatedMessages);
+    const aiMsg: Message = {
+      id: crypto.randomUUID(),
+      role: 'ai',
+      text: reply,
+      time: now(),
+    };
+    setMessages(prev => [...prev, aiMsg]);
     setIsTyping(false);
   };
 
@@ -124,11 +172,13 @@ function ChatModal({ onClose }: { onClose: () => void }) {
       "
     >
       {/* ── Header ── */}
-      <div className="
+      <div
+        className="
         flex items-center gap-3 px-4 py-3 shrink-0
         bg-gradient-to-r from-gray-900 to-gray-800 dark:from-gray-800 dark:to-gray-900
         border-b border-white/10
-      ">
+      "
+      >
         {/* Avatar */}
         <div className="relative shrink-0">
           <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#6efd0b] to-[#3fa006] flex items-center justify-center shadow-lg shadow-[#6efd0b]/30">
@@ -138,7 +188,9 @@ function ChatModal({ onClose }: { onClose: () => void }) {
         </div>
 
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-semibold text-white leading-none">AI Assistant</p>
+          <p className="text-sm font-semibold text-white leading-none">
+            AI Assistant
+          </p>
           <p className="text-[11px] text-[#6efd0b] mt-0.5 flex items-center gap-1">
             <Sparkles size={10} /> Online · Ready to help
           </p>
@@ -163,11 +215,15 @@ function ChatModal({ onClose }: { onClose: () => void }) {
       </div>
 
       {/* ── Messages ── */}
-      <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3 bg-gray-50 dark:bg-gray-950/50"
-        style={{ scrollbarWidth: 'thin', scrollbarColor: '#d1d5db transparent' }}
+      <div
+        className="flex-1 overflow-y-auto px-4 py-4 space-y-3 bg-gray-50 dark:bg-gray-950/50"
+        style={{
+          scrollbarWidth: 'thin',
+          scrollbarColor: '#d1d5db transparent',
+        }}
       >
         <AnimatePresence initial={false}>
-          {messages.map((msg) => (
+          {messages.map(msg => (
             <motion.div
               key={msg.id}
               initial={{ opacity: 0, y: 8, scale: 0.97 }}
@@ -176,27 +232,37 @@ function ChatModal({ onClose }: { onClose: () => void }) {
               className={`flex items-end gap-2 ${msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'}`}
             >
               {/* Avatar dot */}
-              <div className={`
+              <div
+                className={`
                 shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-[11px] shadow
-                ${msg.role === 'ai'
-                  ? 'bg-gradient-to-br from-[#6efd0b] to-[#3fa006] text-gray-900'
-                  : 'bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300'
+                ${
+                  msg.role === 'ai'
+                    ? 'bg-gradient-to-br from-[#6efd0b] to-[#3fa006] text-gray-900'
+                    : 'bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300'
                 }
-              `}>
+              `}
+              >
                 {msg.role === 'ai' ? <Bot size={13} /> : <User size={13} />}
               </div>
 
-              <div className={`max-w-[72%] ${msg.role === 'user' ? 'items-end' : 'items-start'} flex flex-col gap-0.5`}>
-                <div className={`
+              <div
+                className={`max-w-[72%] ${msg.role === 'user' ? 'items-end' : 'items-start'} flex flex-col gap-0.5`}
+              >
+                <div
+                  className={`
                   px-3.5 py-2.5 rounded-2xl text-sm leading-relaxed
-                  ${msg.role === 'ai'
-                    ? 'bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 rounded-bl-sm shadow-sm border border-gray-100 dark:border-gray-700'
-                    : 'bg-gradient-to-br from-gray-900 to-gray-700 dark:from-gray-700 dark:to-gray-600 text-white rounded-br-sm shadow-md'
+                  ${
+                    msg.role === 'ai'
+                      ? 'bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 rounded-bl-sm shadow-sm border border-gray-100 dark:border-gray-700'
+                      : 'bg-gradient-to-br from-gray-900 to-gray-700 dark:from-gray-700 dark:to-gray-600 text-white rounded-br-sm shadow-md'
                   }
-                `}>
+                `}
+                >
                   {msg.text}
                 </div>
-                <span className="text-[10px] text-gray-400 dark:text-gray-500 px-1">{msg.time}</span>
+                <span className="text-[10px] text-gray-400 dark:text-gray-500 px-1">
+                  {msg.time}
+                </span>
               </div>
             </motion.div>
           ))}
@@ -214,12 +280,16 @@ function ChatModal({ onClose }: { onClose: () => void }) {
                 <Bot size={13} className="text-gray-900" />
               </div>
               <div className="px-4 py-3 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl rounded-bl-sm shadow-sm flex gap-1 items-center">
-                {[0, 1, 2].map((i) => (
+                {[0, 1, 2].map(i => (
                   <motion.span
                     key={i}
                     className="w-1.5 h-1.5 rounded-full bg-gray-400 dark:bg-gray-500 block"
                     animate={{ y: [0, -4, 0] }}
-                    transition={{ duration: 0.6, repeat: Infinity, delay: i * 0.15 }}
+                    transition={{
+                      duration: 0.6,
+                      repeat: Infinity,
+                      delay: i * 0.15,
+                    }}
                   />
                 ))}
               </div>
@@ -235,7 +305,7 @@ function ChatModal({ onClose }: { onClose: () => void }) {
           <textarea
             ref={inputRef}
             value={input}
-            onChange={(e) => setInput(e.target.value)}
+            onChange={e => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Type a message…"
             rows={1}
@@ -264,7 +334,15 @@ function ChatModal({ onClose }: { onClose: () => void }) {
           </button>
         </div>
         <p className="text-center text-[10px] text-gray-400 dark:text-gray-600 mt-2">
-          Press <kbd className="font-mono bg-gray-100 dark:bg-gray-800 px-1 rounded">Enter</kbd> to send · <kbd className="font-mono bg-gray-100 dark:bg-gray-800 px-1 rounded">Shift+Enter</kbd> for new line
+          Press{' '}
+          <kbd className="font-mono bg-gray-100 dark:bg-gray-800 px-1 rounded">
+            Enter
+          </kbd>{' '}
+          to send ·{' '}
+          <kbd className="font-mono bg-gray-100 dark:bg-gray-800 px-1 rounded">
+            Shift+Enter
+          </kbd>{' '}
+          for new line
         </p>
       </div>
     </motion.div>
@@ -300,8 +378,12 @@ export default function FloatingActions() {
         <motion.div variants={itemVariants} className="group flex items-center">
           <div className="overflow-hidden max-w-0 group-hover:max-w-[160px] transition-all duration-300 ease-in-out">
             <div className="mr-3 px-4 py-2 rounded-full bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm border border-[#25D366]/30 shadow-lg shadow-[#25D366]/10 whitespace-nowrap">
-              <p className="text-[13px] font-semibold text-gray-800 dark:text-gray-100 leading-none">Chat on WhatsApp</p>
-              <p className="text-[11px] text-[#25D366] font-medium mt-0.5">Online now</p>
+              <p className="text-[13px] font-semibold text-gray-800 dark:text-gray-100 leading-none">
+                Chat on WhatsApp
+              </p>
+              <p className="text-[11px] text-[#25D366] font-medium mt-0.5">
+                Online now
+              </p>
             </div>
           </div>
           <Link
@@ -321,12 +403,16 @@ export default function FloatingActions() {
         <motion.div variants={itemVariants} className="group flex items-center">
           <div className="overflow-hidden max-w-0 group-hover:max-w-[160px] transition-all duration-300 ease-in-out">
             <div className="mr-3 px-4 py-2 rounded-full bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm border border-[#6efd0b]/30 shadow-lg shadow-[#6efd0b]/10 whitespace-nowrap">
-              <p className="text-[13px] font-semibold text-gray-800 dark:text-gray-100 leading-none">AI Assistant</p>
-              <p className="text-[11px] text-[#4bb008] dark:text-[#6efd0b] font-medium mt-0.5">Ask me anything</p>
+              <p className="text-[13px] font-semibold text-gray-800 dark:text-gray-100 leading-none">
+                AI Assistant
+              </p>
+              <p className="text-[11px] text-[#4bb008] dark:text-[#6efd0b] font-medium mt-0.5">
+                Ask me anything
+              </p>
             </div>
           </div>
           <button
-            onClick={() => setIsChatOpen((prev) => !prev)}
+            onClick={() => setIsChatOpen(prev => !prev)}
             aria-label="Open AI Chatbot"
             className={`
               relative flex items-center justify-center
@@ -343,11 +429,25 @@ export default function FloatingActions() {
             <span className="absolute inset-[2px] rounded-full bg-gradient-to-b from-white/30 to-transparent pointer-events-none" />
             <AnimatePresence mode="wait" initial={false}>
               {isChatOpen ? (
-                <motion.div key="close" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.15 }} className="relative z-10">
+                <motion.div
+                  key="close"
+                  initial={{ rotate: -90, opacity: 0 }}
+                  animate={{ rotate: 0, opacity: 1 }}
+                  exit={{ rotate: 90, opacity: 0 }}
+                  transition={{ duration: 0.15 }}
+                  className="relative z-10"
+                >
                   <Minimize2 size={22} />
                 </motion.div>
               ) : (
-                <motion.div key="open" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.15 }} className="relative z-10">
+                <motion.div
+                  key="open"
+                  initial={{ rotate: -90, opacity: 0 }}
+                  animate={{ rotate: 0, opacity: 1 }}
+                  exit={{ rotate: 90, opacity: 0 }}
+                  transition={{ duration: 0.15 }}
+                  className="relative z-10"
+                >
                   <Bot size={24} className="drop-shadow-sm" />
                 </motion.div>
               )}
@@ -358,5 +458,3 @@ export default function FloatingActions() {
     </>
   );
 }
-
-
