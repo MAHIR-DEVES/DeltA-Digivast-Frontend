@@ -1,6 +1,6 @@
 'use client';
 
-import Image from 'next/image';
+import React from 'react';
 import {
   Play,
   Camera,
@@ -10,81 +10,56 @@ import {
   Calendar,
   Users,
   Star,
-  Phone,
-  Mail,
   Award,
+  Sparkles,
+  ArrowRight,
 } from 'lucide-react';
+import Link from 'next/link';
+import CtaSection from '@/components/module/shared/CtaSection';
 
 export default function VideographyPage() {
   const services = [
     {
       icon: Film,
-      title: 'Commercials',
+      title: '📣 Promotional & Commercial Video',
       description:
-        'High-impact commercial videos that tell your brand story and drive engagement.',
+        'High-impact promotional videos for your product or service, optimized for Facebook and Instagram advertising. We have worked across various industries in Rajshahi, including clothing shops, restaurants, real estate, and more.',
       color: 'from-blue-500 to-cyan-500',
     },
     {
       icon: Video,
-      title: 'Event Coverage',
+      title: '🥭 Product Showcase & Food Video',
       description:
-        'Professional coverage of weddings, conferences, concerts, and special events.',
+        'High-impact product showcase and food videos that highlight your offerings in the best light. Organic food, mango, restaurant dishes, clothing — product videos that inspire customers to buy.',
       color: 'from-purple-500 to-pink-500',
     },
     {
       icon: Camera,
-      title: 'Corporate Videos',
+      title: '🎓 Educational & Explainer Video',
       description:
-        'Polished corporate content including interviews, testimonials, and company profiles.',
+        'Coaching centre, medical institute, school — educational and explainer videos that make complex topics easy to understand. We create engaging content that resonates with the local audience in Rajshahi.',
       color: 'from-green-500 to-emerald-500',
     },
     {
       icon: Clapperboard,
-      title: 'Creative Storytelling',
+      title: '📱 Social Media Reels & Short Video',
       description:
-        'Artistic and narrative-driven videos that captivate and inspire audiences.',
+        'Short, engaging videos optimized for social media platforms like Facebook and Instagram. We create reels that capture attention and drive engagement, helping your brand stand out in the competitive digital landscape of Rajshahi.',
       color: 'from-orange-500 to-red-500',
     },
   ];
 
   const stats = [
-    { label: 'Projects Completed', value: '500+', icon: Film },
-    { label: 'Happy Clients', value: '300+', icon: Users },
-    { label: 'Years Experience', value: '12+', icon: Award },
-    { label: 'Awards Won', value: '25+', icon: Star },
-  ];
-
-  const testimonials = [
-    {
-      name: 'Sarah Johnson',
-      role: 'Marketing Director, Nike',
-      content:
-        'The team delivered exceptional quality. Our commercial exceeded expectations.',
-      rating: 5,
-      image: 'https://randomuser.me/api/portraits/women/44.jpg',
-    },
-    {
-      name: 'Michael Chen',
-      role: 'CEO, Tech Innovators',
-      content:
-        'Professional, creative, and incredibly talented. They captured our brand perfectly.',
-      rating: 5,
-      image: 'https://randomuser.me/api/portraits/men/32.jpg',
-    },
-    {
-      name: 'Emily Rodriguez',
-      role: 'Event Coordinator',
-      content:
-        'Our wedding video is absolutely beautiful. They captured every moment.',
-      rating: 5,
-      image: 'https://randomuser.me/api/portraits/women/68.jpg',
-    },
+    { label: 'Projects ', value: '100+', icon: Film },
+    { label: ' Clients', value: '80+', icon: Users },
+    { label: ' Experience', value: '1+', icon: Award },
+    { label: 'Awards ', value: '1+', icon: Star },
   ];
 
   return (
-    <div className="min-h-screen bg-white dark:bg-black transition-colors duration-300">
+    <div className="min-h-screen  transition-colors duration-300">
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-white dark:bg-black py-24">
+      <section className="relative overflow-hidden py-7 md:py-20">
         <div className="absolute top-0 left-0 w-1/3 h-full bg-gradient-to-r from-[#6efd0b]/5 to-transparent"></div>
         <div className="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-[#6efd0b]/5 to-transparent"></div>
 
@@ -93,76 +68,93 @@ export default function VideographyPage() {
           <div className="absolute bottom-20 right-10 w-72 h-72 bg-purple-500 rounded-full blur-3xl"></div>
         </div>
 
-        <div className="relative max-w-7xl mx-auto px-4 lg:px-8">
+        <div className="relative container mx-auto px-3 lg:px-0">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
-              <span className="inline-flex items-center gap-2 px-4 py-2 bg-[#6efd0b]/10 text-[#6efd0b] rounded-full text-sm font-medium mb-6">
-                <Camera size={16} />
-                Professional Video Production
-              </span>
+              {/* Premium Badge */}
+              <div className="inline-flex mb-2 md:mb-5">
+                <span className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#6efd0b]/10 to-transparent border-l-4 border-[#6efd0b] rounded-r-lg text-sm font-medium text-lime-500 dark:text-[#6efd0b]">
+                  <Sparkles size={16} />
+                  Professional Video Production — Rajshahi
+                </span>
+              </div>
 
-              <h1 className="text-5xl md:text-6xl font-bold text-gray-900 dark:text-white mb-6">
-                Bringing Your Vision to
+              <h1 className="text-2xl md:text-6xl font-bold text-gray-900 dark:text-white mb-6">
+                Bring Your Vision to Life
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#6efd0b] to-[#2e9e00]">
                   {' '}
-                  Life
+                  in Rajshahi
                 </span>
               </h1>
 
-              <p className="text-xl text-gray-600 dark:text-gray-400 mb-8">
-                Professional video production services for commercials, events,
-                corporate shoots, and creative storytelling.
+              <p className=" text-gray-600 dark:text-gray-300 mb-8">
+                A good video can transform your business story. Our in-house
+                studio or outdoor shoots, professional editing, and
+                result-driven approach ensure your vision comes to life.
               </p>
 
               <div className="flex flex-wrap gap-4">
-                <button className="px-8 py-4 bg-[#6efd0b] text-gray-900 rounded-xl font-semibold hover:bg-[#4fd100] transition flex items-center gap-2">
-                  <Play size={18} />
-                  Watch Showreel
-                </button>
+                <Link href={'/portfolio'}>
+                  <button className="px-8 py-4 bg-[#6efd0b] text-gray-900 rounded-xl font-semibold hover:bg-[#4fd100] transition flex items-center gap-2">
+                    <Play size={18} />
+                    View Portfolio
+                  </button>
+                </Link>
 
-                <button className="px-8 py-4 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-xl font-semibold transition flex items-center gap-2">
-                  <Calendar size={18} />
-                  Book Consultation
-                </button>
+                <Link href={'/contact'}>
+                  <button className="px-8 py-4 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-xl font-semibold transition flex items-center gap-2">
+                    Start a Project
+                    <ArrowRight size={18} />
+                  </button>
+                </Link>
               </div>
             </div>
 
-            {/* Video */}
-            <div className="relative">
-              <div className="relative rounded-2xl overflow-hidden shadow-2xl aspect-video">
-                <Image
-                  src="https://plus.unsplash.com/premium_photo-1663040316559-8684ca45d7e9?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                  alt="Video"
-                  fill
-                  className="object-cover"
+            <div className="">
+              <div className="relative w-full overflow-hidden rounded-sm md:rounded-2xl">
+                <video
+                  id="heroVideo"
+                  src="/videos/hero-video.mp4"
+                  poster="https://images.unsplash.com/photo-1536240474400-5ddbcd0a1b56?q=80&w=1000"
+                  className="w-full h-full object-cover"
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  controls
                 />
-
-                <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
-                  <button className="w-20 h-20 bg-[#6efd0b] rounded-full flex items-center justify-center">
-                    <Play className="w-8 h-8 text-gray-900 ml-1" />
-                  </button>
-                </div>
               </div>
             </div>
           </div>
         </div>
+        {/* Premium Bottom Decorative Line */}
+        <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#6efd0b]/30 to-transparent"></div>
       </section>
 
-      {/* Stats */}
-      <section className="py-16 bg-white dark:bg-black">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+      {/* Stats - Optimized Colors */}
+      <section className="py-12 md:py-16 lg:py-20 bg-[#FAFFF7] dark:bg-gray-950">
+        <div className="max-w-7xl mx-auto  sm:px-6 lg:px-8">
+          <div className="grid grid-cols-4 gap-0">
             {stats.map((stat, index) => (
-              <div key={index} className="text-center">
-                <div className="inline-flex items-center justify-center w-12 h-12 bg-[#6efd0b]/10 rounded-xl mb-3">
-                  <stat.icon className="w-5 h-5 text-[#6efd0b]" />
+              <div
+                key={index}
+                className={`
+            text-center  sm:p-3 md:p-4 transition-all duration-300
+            ${index < 3 ? 'border-r border-gray-200 dark:border-gray-800' : ''}
+          `}
+              >
+                {/* Icon with proper light/dark colors */}
+                <div className="inline-flex items-center justify-center w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 bg-[#6efd0b]/10 dark:bg-[#6efd0b]/10 rounded-md sm:rounded-lg mb-1 sm:mb-2 transition-all duration-300 group-hover:scale-110">
+                  <stat.icon className="w-10 h-10 sm:w-4 sm:h-4 md:w-5 md:h-5 text-[#2e7d00] dark:text-[#6efd0b]" />
                 </div>
 
-                <div className="text-3xl font-bold text-gray-900 dark:text-white">
+                {/* Value */}
+                <div className="text-sm md:text-xl lg:text-2xl font-bold text-gray-900 dark:text-white">
                   {stat.value}
                 </div>
 
-                <div className="text-sm text-gray-500 dark:text-gray-400">
+                {/* Label - Improved visibility */}
+                <div className="text-sm text-gray-600 dark:text-gray-300 leading-tight mt-0.5 sm:mt-1">
                   {stat.label}
                 </div>
               </div>
@@ -172,19 +164,19 @@ export default function VideographyPage() {
       </section>
 
       {/* Services */}
-      <section className="py-20 bg-white dark:bg-black">
+      <section className="pb-10 md:pb-20 ">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
-              Our Services
+            <h2 className="text-2xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+              VIDEO SERVICES WE OFFER
             </h2>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
             {services.map((service, index) => (
               <div
                 key={index}
-                className="bg-white dark:bg-black p-6 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700"
+                className=" p-6 rounded-xs shadow-xs border border-gray-200 dark:border-gray-800"
               >
                 <div
                   className={`w-14 h-14 bg-gradient-to-br ${service.color} rounded-xl flex items-center justify-center mb-4`}
@@ -196,7 +188,7 @@ export default function VideographyPage() {
                   {service.title}
                 </h3>
 
-                <p className="text-sm text-gray-600 dark:text-gray-400">
+                <p className="text-sm text-gray-600 dark:text-gray-300">
                   {service.description}
                 </p>
               </div>
@@ -204,86 +196,8 @@ export default function VideographyPage() {
           </div>
         </div>
       </section>
-
-      {/* Testimonials */}
-      <section className="py-20 bg-white dark:bg-black">
-        <div className="max-w-7xl mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center text-gray-900 dark:text-white mb-12">
-            Client Testimonials
-          </h2>
-
-          <div className="grid md:grid-cols-3 gap-6">
-            {testimonials.map((t, index) => (
-              <div
-                key={index}
-                className="bg-white dark:bg-black p-6 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700"
-              >
-                <div className="flex items-center gap-4 mb-4">
-                  <div className="relative w-12 h-12 rounded-full overflow-hidden">
-                    <Image
-                      src={t.image}
-                      alt={t.name}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
-
-                  <div>
-                    <h4 className="font-semibold text-gray-900 dark:text-white">
-                      {t.name}
-                    </h4>
-
-                    <p className="text-xs text-gray-500 dark:text-gray-400">
-                      {t.role}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex mb-2">
-                  {[...Array(t.rating)].map((_, i) => (
-                    <Star
-                      key={i}
-                      className="w-4 h-4 fill-yellow-400 text-yellow-400"
-                    />
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Contact */}
-      <section className="py-20 bg-white dark:bg-black">
-        <div className="max-w-4xl mx-auto text-center px-4">
-          <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
-            Ready to Start Your Project?
-          </h2>
-
-          <p className="text-xl text-gray-600 dark:text-gray-400 mb-8">
-            Let&apos;s discuss your vision and create something amazing
-            together.
-          </p>
-
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a
-              href="tel:+880123456789"
-              className="px-6 py-3 bg-[#6efd0b] text-gray-900 rounded-xl font-semibold flex items-center justify-center gap-2"
-            >
-              <Phone size={18} />
-              Call Us
-            </a>
-
-            <a
-              href="mailto:info@agency.com"
-              className="px-6 py-3 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-xl font-semibold flex items-center justify-center gap-2"
-            >
-              <Mail size={18} />
-              Email Us
-            </a>
-          </div>
-        </div>
-      </section>
+      {/* CTA section */}
+      <CtaSection></CtaSection>
     </div>
   );
 }
