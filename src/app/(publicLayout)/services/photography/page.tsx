@@ -16,10 +16,10 @@ import {
   Users2,
   Palette,
   Layout,
-  ArrowUpRight,
   Camera,
 } from 'lucide-react';
 import CtaSection from '@/components/module/shared/CtaSection';
+import Image from 'next/image';
 
 export default function PhotographyPage() {
   const services = [
@@ -139,57 +139,92 @@ export default function PhotographyPage() {
 
   return (
     <div className="min-h-screen  transition-colors duration-300">
-      {/* Hero Section  */}
-      <section className="relative bg-[#FAFFF7] dark:bg-gray-950 overflow-hidden ">
-        {/* Premium Background Elements */}
-        <div className="absolute inset-0">
-          <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[#6efd0b]/5 rounded-full blur-3xl"></div>
-          <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-[#6efd0b]/5 rounded-full blur-3xl"></div>
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[#6efd0b]/[0.02] rounded-full blur-3xl"></div>
-        </div>
-
-        {/* Subtle Grid Pattern */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#6efd0b08_1px,transparent_1px),linear-gradient(to_bottom,#6efd0b08_1px,transparent_1px)] bg-[size:40px_40px]"></div>
-
-        <div className="relative px-4 sm:px-6 lg:px-8 py-10 md:py-28 lg:py-36">
-          <div className="text-center">
-            {/* Premium Badge with Animation */}
-            <div className="inline-flex mb-8 group cursor-pointer">
-              <div className="relative">
-                <div className="absolute inset-0 bg-[#6efd0b]/20 blur-xl rounded-full group-hover:blur-2xl transition-all duration-500"></div>
-                <span className="relative inline-flex items-center gap-2 px-4 py-2 bg-white dark:bg-gray-900/50 backdrop-blur-sm border border-[#6efd0b]/30 rounded-full text-sm font-medium text-[#2e9e00] dark:text-[#6efd0b] shadow-lg">
-                  <Sparkles size={14} className="text-[#6efd0b]" />
-                  Professional Graphics Design
-                  <ArrowUpRight size={14} className="opacity-70" />
+      {/* Hero Section */}
+      <section className="relative overflow-hidden bg-gradient-to-br from-white via-[#FAFFF7] to-white dark:from-gray-950 dark:via-gray-900 dark:to-gray-950">
+        {/* Premium Background Pattern */}
+        <div className="absolute inset-0 bg-[linear-gradient(45deg,#6efd0b02_25%,transparent_25%,transparent_75%,#6efd0b02_75%,#6efd0b02),linear-gradient(45deg,#6efd0b02_25%,transparent_25%,transparent_75%,#6efd0b02_75%,#6efd0b02)] bg-[size:60px_60px] bg-[position:0_0,30px_30px] opacity-30"></div>
+        <div className="container mx-auto px-4 md:px-0 py-10 md:py-20 ">
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+            {/* Left Content */}
+            <div className="space-y-6 md:space-y-8">
+              {/* Premium Badge */}
+              <div className="inline-flex">
+                <span className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#6efd0b]/10 to-transparent border-l-4 border-[#6efd0b] rounded-r-lg text-sm font-medium text-lime-500 dark:text-[#6efd0b]">
+                  <Sparkles size={16} />
+                  Professional Graphics Design Services
                 </span>
               </div>
-            </div>
-            {/* Premium Responsive Heading */}
-            <div className="mb-4 md:mb-8">
-              <h1 className="font-bold tracking-tight leading-[1.1] text-center">
-                <span className="block text-gray-800 dark:text-gray-100 text-xl sm:text-4xl md:text-5xl lg:text-6xl">
-                  আপনার Brand-এর জন্য Creative
-                </span>
 
-                <span className="block mt-2 text-xl sm:text-5xl md:text-6xl">
-                  <span className="bg-gradient-to-r from-[#6efd0b] via-[#8bff3a] to-[#2e9e00] bg-clip-text text-transparent">
-                    Graphics Design
-                  </span>
-                </span>
+              {/* Main Heading */}
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white leading-tight tracking-tight">
+                Rajshahi&apos;s Trusted Graphics Design Agency
               </h1>
+
+              {/* Description */}
+              <p className="text-base sm:text-lg md:text-xl text-gray-600 dark:text-gray-300 leading-relaxed max-w-lg">
+                Professional graphics design services in Rajshahi. We create
+                stunning visuals that elevate your brand and captivate your
+                audience.
+              </p>
             </div>
 
-            {/* Premium Description */}
-            <p className="text-gray-600 dark:text-gray-300 text-base text-sm md:text-xl max-w-2xl mx-auto leading-relaxed md:mb-10">
-              We create stunning graphics that elevate your brand and captivate
-              your audience. From logos to marketing materials, our designs make
-              a lasting impression.
-            </p>
+            {/* Right Content - Premium Image Card */}
+            <div className="relative">
+              {/* Decorative blurred circle */}
+              <div className="absolute -top-10 -right-10 w-40 h-40 bg-[#6efd0b]/20 rounded-full blur-3xl"></div>
+              <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-[#2e9e00]/20 rounded-full blur-3xl"></div>
+
+              {/* Main Image Card */}
+              <div className="relative rounded-2xl overflow-hidden shadow-2xl ring-1 ring-gray-200 dark:ring-gray-800">
+                <div className="aspect-[4/3] relative">
+                  <Image
+                    src={'/image/Graphic-Design-Services.jpeg'}
+                    alt="Graphics Design Team"
+                    fill
+                    className="object-cover"
+                    priority
+                  />
+                </div>
+                {/* Gradient overlay */}
+                <div className="absolute inset-0 bg-gradient-to-tr from-[#6efd0b]/10 via-transparent to-transparent"></div>
+
+                {/* Floating trust badge */}
+                <div className="absolute bottom-4 left-4 right-4 bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm rounded-xl p-3 shadow-lg border border-gray-200 dark:border-gray-800">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 bg-[#6efd0b]/10 rounded-full flex items-center justify-center">
+                      <svg
+                        className="w-4 h-4 text-[#6efd0b]"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </div>
+                    <div>
+                      <p className="text-xs font-semibold text-gray-900 dark:text-white">
+                        Trusted by 30+ Businesses
+                      </p>
+                      <p className="text-xs text-gray-500 dark:text-gray-300">
+                        in Rajshahi
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
         {/* Premium Bottom Decorative Line */}
-        <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#6efd0b]/30 to-transparent"></div>
+        <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#6efd0b]/50 to-transparent"></div>
+
+        {/* Background decorative elements */}
+        <div className="absolute top-0 right-0 w-96 h-96 bg-[#6efd0b]/5 rounded-full blur-3xl -z-10"></div>
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-[#2e9e00]/5 rounded-full blur-3xl -z-10"></div>
       </section>
 
       {/* Stats Section */}
