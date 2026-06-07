@@ -2,7 +2,6 @@
 import React from 'react';
 import Image from 'next/image';
 import { Layers } from 'lucide-react';
-import Link from 'next/link';
 
 type Project = {
   id: string;
@@ -27,46 +26,57 @@ const categories = [
 ];
 
 export default function ProjectGrid({ projects }: Props) {
-  const [filter, setFilter] = React.useState<'all' | string>('all');
+  const [filter, setFilter] = React.useState<string>('Video Content');
 
   const filteredProjects =
     filter === 'all' ? projects : projects.filter(p => p.category === filter);
 
+  const imageProjects = filteredProjects.filter(p => p.imageUrl);
+  const videoProjects = filteredProjects.filter(p => p.videoUrl);
+
   return (
-    <section className="max-w-7xl mx-auto px-4 sm:px-0">
-      {/* Filter */}
-      <div className="flex flex-wrap items-center gap-3 my-8">
-        <span className="text-sm font-medium text-gray-700 dark:text-gray-300 mr-2">
-          <Layers size={16} className="inline mr-1" />
-          Filter:
-        </span>
-        {categories.map(category => (
-          <button
-            key={category}
-            onClick={() => setFilter(category)}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-              filter === category
-                ? 'bg-[#6efd0b] text-gray-900 shadow-lg shadow-[#6efd0b]/25'
-                : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
-            }`}
-          >
-            {category.charAt(0).toUpperCase() + category.slice(1)}
-          </button>
-        ))}
+    <section className="max-w-7xl mx-auto ">
+      {/* Filter - Clean One Line */}
+      <div className="my-8">
+        <div className="flex items-start gap-3 flex-wrap lg:flex-nowrap">
+          <span className="text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center gap-1 pt-2">
+            <Layers size={16} />
+            Filter:
+          </span>
+
+          <div className="flex-1 overflow-x-auto overflow-y-hidden scrollbar-hide">
+            <div className="flex gap-2 min-w-max">
+              {categories.map(category => (
+                <button
+                  key={category}
+                  onClick={() => setFilter(category)}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 whitespace-nowrap
+              ${
+                filter === category
+                  ? 'bg-[#6efd0b] text-gray-900 shadow-lg shadow-[#6efd0b]/25'
+                  : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
+              }`}
+                >
+                  {category.charAt(0).toUpperCase() + category.slice(1)}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
 
-      {/* Grid */}
+      {/* video Grid */}
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5 pb-3">
-        {filteredProjects.map(project => (
+        {videoProjects.map(project => (
           // <Link
           //   key={project.id}
           //   href={`/portfolio/${project.id}`}
           //   className="group block bg-white dark:bg-black rounded-md shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border border-border"
           // >
           <div key={project.id} className="">
-            <div className="relative h-48 overflow-hidden">
+            <div className="relative  overflow-hidden">
               {project.imageUrl ? (
-                <div className="relative w-full max-w-[1080px] aspect-square">
+                <div className="relative w-full  aspect-square">
                   <Image
                     src={project.imageUrl}
                     alt={project.title}
@@ -75,33 +85,65 @@ export default function ProjectGrid({ projects }: Props) {
                   />
                 </div>
               ) : project.videoUrl ? (
-                <iframe
-                  src={
-                    project.videoUrl.includes('youtu.be')
-                      ? `https://www.youtube.com/embed/${project.videoUrl.split('/').pop()}`
-                      : project.videoUrl
-                  }
-                  title={project.title}
-                  className="w-full h-full"
-                  allowFullScreen
-                />
+                <div className="h-52 md:h-60 ">
+                  <iframe
+                    src={
+                      project.videoUrl.includes('youtu.be')
+                        ? `https://www.youtube.com/embed/${project.videoUrl.split('/').pop()}`
+                        : project.videoUrl
+                    }
+                    title={project.title}
+                    className="w-full h-full rounded-md "
+                    allowFullScreen
+                  />
+                </div>
               ) : (
-                <div className="w-full h-full bg-gray-200 dark:bg-gray-800 flex items-center justify-center text-gray-500 dark:text-gray-400">
+                <div className="w-full h-full bg-gray-200 dark:bg-gray-800 flex items-center justify-center text-gray-500 dark:text-gray-300">
                   No Preview
                 </div>
               )}
-              <span className="absolute top-3 left-3 px-2 py-1 bg-[#6efd0b] text-gray-900 dark:text-gray-900 rounded-full text-xs font-medium">
-                {project.category}
-              </span>
             </div>
-
-            <div className="p-6">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-[#6efd0b] transition-colors">
-                {project.title}
-              </h3>
-              <p className="text-sm text-gray-600 dark:text-gray-400 mb-4 line-clamp-2">
-                {project.description}
-              </p>
+          </div>
+          // </Link>
+        ))}
+      </div>
+      {/* images Grid */}
+      <div className="grid grid-cols-3 lg:grid-cols-8 gap-5 pb-3">
+        {imageProjects.map(project => (
+          // <Link
+          //   key={project.id}
+          //   href={`/portfolio/${project.id}`}
+          //   className="group block bg-white dark:bg-black rounded-md shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border border-border"
+          // >
+          <div key={project.id} className="">
+            <div className="relative  overflow-hidden">
+              {project.imageUrl ? (
+                <div className="relative w-full  aspect-square">
+                  <Image
+                    src={project.imageUrl}
+                    alt={project.title}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                </div>
+              ) : project.videoUrl ? (
+                <div className="h-52 md:h-60 ">
+                  <iframe
+                    src={
+                      project.videoUrl.includes('youtu.be')
+                        ? `https://www.youtube.com/embed/${project.videoUrl.split('/').pop()}`
+                        : project.videoUrl
+                    }
+                    title={project.title}
+                    className="w-full h-full rounded-md "
+                    allowFullScreen
+                  />
+                </div>
+              ) : (
+                <div className="w-full h-full bg-gray-200 dark:bg-gray-800 flex items-center justify-center text-gray-500 dark:text-gray-300">
+                  No Preview
+                </div>
+              )}
             </div>
           </div>
           // </Link>

@@ -31,7 +31,7 @@ async function getBlog(id: string): Promise<Blog | null> {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/blogs/${id}`,
       {
-        cache: 'no-store',
+        next: { revalidate: 60 },
       },
     );
     if (!res.ok) return null;
@@ -49,7 +49,7 @@ export default async function BlogDetailPage({ params }: Props) {
 
   if (!blog) {
     return (
-      <div className="min-h-screen bg-white dark:bg-gray-900 flex items-center justify-center p-4">
+      <div className="min-h-screen  flex items-center justify-center p-4">
         <div className="text-center max-w-md">
           <div className="w-20 h-20 bg-[#6efd0b]/10 rounded-full flex items-center justify-center mx-auto mb-6">
             <Calendar className="w-8 h-8 text-[#6efd0b]" />
@@ -58,7 +58,8 @@ export default async function BlogDetailPage({ params }: Props) {
             Blog Post Not Found
           </h1>
           <p className="text-gray-600 dark:text-gray-400 mb-6">
-            The blog post you're looking for doesn't exist or has been removed.
+            The blog post you&apos;re looking for doesn&apos;t exist or has been
+            removed.
           </p>
           <Link
             href="/blog"
@@ -86,7 +87,7 @@ export default async function BlogDetailPage({ params }: Props) {
   );
 
   return (
-    <div className="min-h-screen bg-white dark:bg-black transition-colors duration-300">
+    <div className="min-h-screen  transition-colors duration-300">
       {/* Back Navigation */}
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-8">
         <Link
@@ -111,7 +112,7 @@ export default async function BlogDetailPage({ params }: Props) {
         </div>
 
         {/* Title */}
-        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-6 leading-tight">
+        <h1 className="text-3xl md:text-4xl  font-bold text-gray-900 dark:text-white mb-6 leading-tight">
           {blog.title}
         </h1>
 

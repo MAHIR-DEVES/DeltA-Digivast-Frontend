@@ -5,8 +5,7 @@ import { Hero } from '@/components/layouts/hero';
 import HeroVideo from '@/components/layouts/HeroVideo';
 import { ServiceSection } from '@/components/layouts/ServiceSection';
 import { FAQ } from '@/components/layouts/FAQ';
-import { Stats } from '@/components/layouts/Stats';
-import { Newsletter } from '@/components/layouts/Newsletter';
+
 import { CallToAction } from '@/components/layouts/CallToAction';
 import ProjectCardHome from '@/components/module/comon/ProjectCardHome';
 import { getHeroData } from '@/service/hero.service';
@@ -38,7 +37,7 @@ export default async function HomePage() {
   const projects = await getProjects();
   const hero = data?.data;
   return (
-    <div>
+    <div className="space-y-10 md:space-y-20">
       <Hero
         badge="Trusted by 200+ Brands Worldwide"
         heading={hero?.title}
@@ -51,13 +50,13 @@ export default async function HomePage() {
       <BrandLogoSection></BrandLogoSection>
       <HeroVideo></HeroVideo>
       <ServiceSection></ServiceSection>
-      <Stats />
+
       <ClientReview></ClientReview>
       {/* Project Grid + Filter */}
       <ProjectCardHome projects={projects} />
       <FAQ />
       <CallToAction />
-      <Newsletter />
+
       <Contact2></Contact2>
     </div>
   );

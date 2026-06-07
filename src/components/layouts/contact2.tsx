@@ -13,14 +13,20 @@ interface Contact2Props {
   phone?: string;
   email?: string;
   web?: { label: string; url: string };
+  address?: string; // New prop added
   className?: string;
 }
 
 const Contact2 = ({
   title = 'Contact Us',
-  description = 'We are available for questions, feedback, or collaboration opportunities. Let us know how we can help!',
-  phone = '+880 1700-938429',
-  email = 'deltadigivast@gmail.com',
+  description = 'Connect with us to discuss your project, ask questions, or just say hello! We are here to help you bring your ideas to life.',
+  phone = '+88016 3236 3235',
+  email = 'help@deltadigivast.com',
+  web = {
+    label: 'deltadigivast.vercel.app',
+    url: 'https://deltadigivast.vercel.app',
+  },
+  address = '49/2 Rajib Chottor, Old Shimala, BAliya, Rajshahi.',
   className,
 }: Contact2Props) => {
   const [loading, setLoading] = useState(false);
@@ -37,7 +43,7 @@ const Contact2 = ({
       email: formData.get('email'),
       phone: formData.get('phone'),
       from: 'Homepage Contact Form',
-      company: formData.get('message'), // message goes to company
+      company: formData.get('message'),
       date: new Date().toISOString(),
     };
 
@@ -53,125 +59,173 @@ const Contact2 = ({
 
       if (!res.ok) throw new Error('Failed to submit');
 
-      const result = await res.json();
       if (res.ok) {
-        toast.success('Message sent successfully!');
+        toast.success('Thank you! Your message has been sent successfully.');
         form.reset();
       } else {
-        toast.error(
-          result.message || 'Failed to send message. Please try again.',
-        );
+        toast.error('Sorry, the message could not be sent. Please try again.');
       }
     } catch (error) {
       console.error('Error submitting form:', error);
-      toast.error('Failed to send message. Please try again.');
+      toast.error('There is an issue with the server. Please try again.');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <section className={cn('py-20', className)}>
+    <section
+      className={cn('pb-10 md:pb-20 transition-colors duration-300', className)}
+    >
       <div className="container mx-auto px-4">
-        <div className="mx-auto flex max-w-7xl flex-col gap-10 lg:flex-row lg:gap-20">
-          {/* Left Side */}
+        <div className="mx-auto flex justify-between flex-col gap-10 lg:flex-row lg:gap-20">
+          {/* Left Side - Contact Details */}
           <div className="flex max-w-md flex-col gap-10">
             <div>
-              <h1 className="mb-3 text-4xl font-semibold lg:text-5xl">
+              <h1 className="mb-4 text-4xl font-bold lg:text-5xl text-gray-900 dark:text-white">
                 {title}
               </h1>
-              <p className="text-muted-foreground">{description}</p>
+              <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
+                {description}
+              </p>
             </div>
 
-            <div>
-              <h3 className="mb-4 text-xl font-semibold">Contact Details</h3>
-              <ul className="space-y-2">
-                <li>
-                  <span className="font-bold">Phone: </span> {phone}
+            <div className="space-y-6">
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white border-l-4 border-[#6efd0b] pl-4">
+                Contact Information
+              </h3>
+              <ul className="space-y-4">
+                <li className="flex flex-col">
+                  <span className="font-bold text-sm text-[#6efd0b] uppercase tracking-wider">
+                    Phone & WhatsApp
+                  </span>
+                  <span className="text-gray-700 dark:text-gray-300 font-medium">
+                    {phone}
+                  </span>
                 </li>
-                <li>
-                  <span className="font-bold">Email: </span>
-                  <a href={`mailto:${email}`} className="underline ml-1">
+                <li className="flex flex-col">
+                  <span className="font-bold text-sm text-[#6efd0b] uppercase tracking-wider">
+                    Email
+                  </span>
+                  <a
+                    href={`mailto:${email}`}
+                    className="text-gray-700 dark:text-gray-300 hover:text-[#6efd0b] transition-colors"
+                  >
                     {email}
+                  </a>
+                </li>
+                <li className="flex flex-col">
+                  <span className="font-bold text-sm text-[#6efd0b] uppercase tracking-wider">
+                    Address
+                  </span>
+                  <span className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed">
+                    {address}
+                  </span>
+                </li>
+                <li className="flex flex-col">
+                  <span className="font-bold text-sm text-[#6efd0b] uppercase tracking-wider">
+                    Website
+                  </span>
+                  <a
+                    href={web.url}
+                    target="_blank"
+                    className="text-gray-700 dark:text-gray-300 hover:text-[#6efd0b] transition-colors text-sm"
+                  >
+                    {web.label}
                   </a>
                 </li>
               </ul>
             </div>
           </div>
 
-          {/* Form */}
+          {/* Form Side */}
           <form
             onSubmit={handleSubmit}
-            className="grid w-full max-w-3xl grid-cols-2 gap-6 rounded-lg border p-6 md:p-10"
+            className="grid w-full max-w-3xl grid-cols-2 gap-6 rounded-xs border border-gray-100 dark:border-gray-800 p-6 md:p-10 bg-gray-50/50 dark:bg-white/5 shadow-sm"
           >
             {/* Name */}
-            <div className="grid gap-1.5">
-              <Label htmlFor="name">Name</Label>
+            <div className="grid gap-2 col-span-2 md:col-span-1">
+              <Label htmlFor="name" className="text-sm font-semibold">
+                Your Name
+              </Label>
               <Input
                 name="name"
                 type="text"
                 id="name"
-                placeholder="Your Name"
+                placeholder="Write Your Name"
                 required
+                className="bg-[#FAFFF7] dark:bg-gray-950"
               />
             </div>
 
             {/* Email */}
-            <div className="grid gap-1.5">
-              <Label htmlFor="email">Email</Label>
+            <div className="grid gap-2 col-span-2 md:col-span-1">
+              <Label htmlFor="email" className="text-sm font-semibold">
+                Your Email
+              </Label>
               <Input
                 name="email"
                 type="email"
                 id="email"
-                placeholder="Your Email"
+                placeholder="example@mail.com"
                 required
+                className="bg-[#FAFFF7] dark:bg-gray-950"
               />
             </div>
 
             {/* Phone */}
-            <div className="grid gap-1.5">
-              <Label htmlFor="phone">Phone</Label>
+            <div className="grid gap-2 col-span-2 md:col-span-1">
+              <Label htmlFor="phone" className="text-sm font-semibold">
+                Your Phone Number
+              </Label>
               <Input
                 name="phone"
                 type="text"
                 id="phone"
-                placeholder="Your Phone"
+                placeholder="017XXXXXXXX"
                 required
+                className="bg-[#FAFFF7] dark:bg-gray-950"
               />
             </div>
 
-            {/* Address */}
-            <div className="grid gap-1.5">
-              <Label htmlFor="address">Address</Label>
+            {/* Address Input */}
+            <div className="grid gap-2 col-span-2 md:col-span-1">
+              <Label htmlFor="address" className="text-sm font-semibold">
+                Your Address (Optional)
+              </Label>
               <Input
                 name="address"
                 type="text"
                 id="address"
-                placeholder="Your Address"
+                placeholder="Your City/Location"
+                className="bg-[#FAFFF7] dark:bg-gray-950"
               />
             </div>
 
-            {/* Message full width */}
-            <div className="grid gap-1.5 col-span-2">
-              <Label htmlFor="message">Message</Label>
+            {/* Message */}
+            <div className="grid gap-2 col-span-2">
+              <Label htmlFor="message" className="text-sm font-semibold">
+                Your Message
+              </Label>
               <Textarea
                 name="message"
                 id="message"
-                placeholder="Type your message here."
+                placeholder="Write about your project..."
                 required
+                className="bg-[#FAFFF7] dark:bg-gray-950 min-h-[120px]"
               />
             </div>
 
-            {/* Button full width with spinner */}
+            {/* Submit Button */}
             <Button
               type="submit"
-              className="w-full col-span-2"
+              className="w-full col-span-2 py-6 bg-[#6efd0b] text-gray-900 font-bold text-lg hover:bg-[#4fd100] transition-all shadow-lg shadow-[#6efd0b]/20"
               disabled={loading}
             >
               {loading ? (
                 <span className="flex items-center justify-center gap-2">
                   <svg
-                    className="w-5 h-5 animate-spin text-white"
+                    className="w-5 h-5 animate-spin text-gray-900"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
@@ -193,7 +247,7 @@ const Contact2 = ({
                   Sending...
                 </span>
               ) : (
-                'Send Message'
+                'Send Message →'
               )}
             </Button>
           </form>

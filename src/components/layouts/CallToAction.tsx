@@ -59,7 +59,7 @@ const CallToAction = ({ className }: CallToActionProps) => {
   return (
     <section
       className={cn(
-        'relative py-12 md:py-20 overflow-hidden',
+        'relative overflow-hidden',
 
         className,
       )}

@@ -16,15 +16,15 @@ export default function BrandLogoSection() {
   ];
 
   return (
-    <section className="py-16 bg-gray-50 dark:bg-neutral-900 transition-colors duration-300">
+    <section className=" transition-colors duration-300">
       <div className="container mx-auto px-4">
         {/* Section Title */}
         <div className="text-center mb-10">
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-800 dark:text-white">
-            Trusted by Top Enterprises
+          <h2 className="text-xl md:text-3xl font-bold text-gray-800 dark:text-white">
+            Trusted by Rajshahi&apos;s Leading Brands
           </h2>
-          <p className="mt-2 text-gray-500 dark:text-gray-400">
-            We collaborate with leading brands across industries
+          <p className="mt-2 text-sm md:text-xl text-gray-500 dark:text-gray-300">
+            Powering success for brands across various industries
           </p>
         </div>
 

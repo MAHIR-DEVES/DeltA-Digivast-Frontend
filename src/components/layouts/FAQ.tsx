@@ -120,8 +120,8 @@ const FAQ = ({ className }: FAQProps) => {
   return (
     <section
       className={cn(
-        'relative py-12 md:py-20 overflow-hidden',
-        'bg-gradient-to-b from-background via-background to-primary/5',
+        'relative  overflow-hidden',
+
         className,
       )}
     >
